@@ -1,0 +1,9 @@
+name: AreaEssentials
+version: '${project.version}'
+main: net.philocraft.AreaEssentials
+api-version: 1.19
+authors: [ LittleBigOwl ]
+description: A claim plugin compatible with BlueMap
+website: https://littlebigowl.dev
+
+depend: [BlueMap, EssentialsAPI]
