@@ -19,9 +19,7 @@ A BlueMap compatible claim plugin.
 - `/claim edit colorgroupName [groupName]`
 - `/claim edit permissions mobGriefing [true/false]`
 - `/claim edit permissions doPVP [true/false]`
-
 - `/warp [warpName]`
-
 ## Authors
 
 - [@LittleBigOwl](https://www.github.com/LittleBigOwI)
