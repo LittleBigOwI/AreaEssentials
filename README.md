@@ -10,18 +10,18 @@ A BlueMap compatible claim plugin.
 - `/claim off`
 - `/claim info`
 - `/claim blocks`
-- `/claim expand [amount]`
-- `/claim edit color [color]`
-- `/claim edit name [name]`
-- `/claim edit description [description]`
-- `/claim edit joinMessage [message]`
-- `/claim edit leaveMessage [message]`
-- `/claim edit colorgroupName [groupName]`
-- `/claim edit permissions mobGriefing [true/false]`
-- `/claim edit permissions doPVP [true/false]`
-
+- `/area expand [amount]`
+- `/area edit color [color]`
+- `/area edit name [name]`
+- `/area edit description [description]`
+- `/area edit joinMessage [message]`
+- `/area edit leaveMessage [message]`
+- `/area edit colorgroupName [groupName]`
+- `/area edit permissions mobGriefing [true/false]`
+- `/area edit permissions doPVP [true/false]`
+- `/setwarp`
+- `/delwarp`
 - `/warp [warpName]`
-
 ## Authors
 
 - [@LittleBigOwl](https://www.github.com/LittleBigOwI)
