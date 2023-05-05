@@ -7,3 +7,14 @@ description: A claim plugin compatible with BlueMap
 website: https://littlebigowl.dev
 
 depend: [BlueMap, EssentialsAPI]
+
+commands:
+  claim:
+    usage: /<claim> <on/off>
+    description: Toggles claiming mode
+    permission: philocraft.claim.toggle
+
+permissions:
+  philocraft.claim.toggle:
+    description: allows claim command
+    default: true
