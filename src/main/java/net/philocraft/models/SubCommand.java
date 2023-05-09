@@ -2,7 +2,7 @@ package net.philocraft.models;
 
 import org.bukkit.entity.Player;
 
-public abstract class SubCommand {
+public abstract class Subcommand {
 
     public abstract String getName();
 

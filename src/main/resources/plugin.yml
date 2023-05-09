@@ -10,11 +10,20 @@ depend: [BlueMap, EssentialsAPI]
 
 commands:
   claim:
-    usage: /<claim> <on/off>
+    usage: /<command> <on/off>
     description: Toggles claiming mode
     permission: philocraft.claim.toggle
+
+  area:
+    usage: /<command>
+    description: Manages areas
+    permission: philocraft.areas.use
 
 permissions:
   philocraft.claim.toggle:
     description: allows claim command
+    default: true
+
+  philocraft.areas.use:
+    description: allows area command
     default: true

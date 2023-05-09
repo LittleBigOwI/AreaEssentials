@@ -27,14 +27,14 @@ public class Area {
     
     private HashMap<String, Boolean> permissions = new HashMap<>();
 
-    public Area(String name, String enterMessage, String leaveMessage, String groupName, Color color, UUID uuid, Vector2d p1, Vector2d p2, Vector2d p3, Vector2d p4, boolean mobGriefing, boolean doPVP) {
+    public Area(String name, String enterMessage, String leaveMessage, String groupName, long creationDate, Color color, UUID uuid, Vector2d p1, Vector2d p2, Vector2d p3, Vector2d p4, boolean mobGriefing, boolean doPVP) {
         this.name = name;
         this.enterMessage = enterMessage;
         this.leaveMessage = leaveMessage;
         this.groupName = groupName;
 
         this.color = color;
-        this.creationDate = Instant.now().getEpochSecond();
+        this.creationDate = creationDate;
         this.uuid = uuid;
 
         this.p1 = p1;
@@ -47,7 +47,7 @@ public class Area {
     }
 
     public Area(String name, Color color, UUID uuid, Vector2d p1, Vector2d p2) {
-        this(name, null, null, null, color, uuid, p1, new Vector2d(p2.getX(), p1.getY()), p2, new Vector2d(p1.getX(), p2.getX()), false, false);
+        this(name, null, null, uuid.toString(), Instant.now().getEpochSecond(), color, uuid, p1, new Vector2d(p2.getX(), p1.getY()), p2, new Vector2d(p1.getX(), p2.getX()), false, false);
     }
 
     public String getName() {
@@ -78,7 +78,7 @@ public class Area {
         return this.uuid;
     }
 
-    public Vector2d[] getVector2ds() {
+    public Vector2d[] getPoints() {
         return new Vector2d[]{this.p1, this.p2, this.p3, this.p4};
     }
 
@@ -93,7 +93,7 @@ public class Area {
         return bottom*side;
     }
 
-    public double getExpantionCost(BlockFace blockface, double distance) {
+    public double getExpantionCost(BlockFace blockface, int distance) {
         Area area;
         area = this;
 
