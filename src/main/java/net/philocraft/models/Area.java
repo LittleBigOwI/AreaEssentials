@@ -5,9 +5,10 @@ import java.time.Instant;
 import java.util.HashMap;
 import java.util.UUID;
 
-import org.bukkit.block.BlockFace;
-
-import com.flowpowered.math.vector.Vector2d;
+import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
+import org.bukkit.util.BoundingBox;
+import org.bukkit.util.Vector;
 
 public class Area {
     
@@ -20,14 +21,11 @@ public class Area {
     private long creationDate;
     private UUID uuid;
 
-    private Vector2d p1;
-    private Vector2d p2;
-    private Vector2d p3;
-    private Vector2d p4;
+    private BoundingBox box;
     
     private HashMap<String, Boolean> permissions = new HashMap<>();
 
-    public Area(String name, String enterMessage, String leaveMessage, String groupName, long creationDate, Color color, UUID uuid, Vector2d p1, Vector2d p2, Vector2d p3, Vector2d p4, boolean mobGriefing, boolean doPVP) {
+    public Area(String name, String enterMessage, String leaveMessage, String groupName, long creationDate, Color color, UUID uuid, BoundingBox box, boolean mobGriefing, boolean doPVP) {
         this.name = name;
         this.enterMessage = enterMessage;
         this.leaveMessage = leaveMessage;
@@ -37,17 +35,14 @@ public class Area {
         this.creationDate = creationDate;
         this.uuid = uuid;
 
-        this.p1 = p1;
-        this.p2 = p2;
-        this.p3 = p3;
-        this.p4 = p4;
+        this.box = box;
 
         this.permissions.put("mobGriefing", mobGriefing);
         this.permissions.put("doPVP", doPVP);
     }
 
-    public Area(String name, Color color, UUID uuid, Vector2d p1, Vector2d p2) {
-        this(name, null, null, uuid.toString(), Instant.now().getEpochSecond(), color, uuid, p1, new Vector2d(p2.getX(), p1.getY()), p2, new Vector2d(p1.getX(), p2.getX()), false, false);
+    public Area(String name, Color color, UUID uuid, BoundingBox box) {
+        this(name, null, null, uuid.toString(), Instant.now().getEpochSecond(), color, uuid, box, false, false);
     }
 
     public String getName() {
@@ -78,64 +73,63 @@ public class Area {
         return this.uuid;
     }
 
-    public Vector2d[] getPoints() {
-        return new Vector2d[]{this.p1, this.p2, this.p3, this.p4};
-    }
-
     public boolean getPermissions(String permission) {
         return this.permissions.get(permission);
     }
 
     public double getSurface() {
-        double bottom = Math.sqrt(Math.pow((p2.getX() - p1.getX()), 2) + Math.pow((p2.getY() - p1.getY()), 2));
-        double side = Math.sqrt(Math.pow((p3.getX() - p2.getX()), 2) + Math.pow((p3.getY() - p2.getY()), 2));
+        double x1 = this.box.getMinX();
+        double y1 = this.box.getMinY();
 
-        return bottom*side;
+        double x3 = this.box.getMaxX();
+        double y3 = this.box.getMaxY();
+
+        double x2 = x3;
+        double y2 = y1;
+
+        double width = Math.sqrt(Math.pow((x2 - x1), 2) + Math.pow((y2 - y1), 2));
+        double height = Math.sqrt(Math.pow((x3 - x2), 2) + Math.pow((y3 - y2), 2));
+
+        return width*height;
     }
 
-    public double getExpantionCost(BlockFace blockface, int distance) {
-        Area area;
-        area = this;
+    public boolean contains(Vector v) {
+        return this.box.contains(v);
+    }
 
-        if(blockface == BlockFace.SOUTH) {
-            area = new Area(
-                this.name, 
-                this.color,
-                this.uuid,
-                new Vector2d(this.p1.getX(), this.p1.getY()-distance), 
-                new Vector2d(p2)
-            );
-        
-        } else if(blockface == BlockFace.EAST) {
-            area = new Area(
-                this.name, 
-                this.color, 
-                this.uuid,
-                new Vector2d(p2), 
-                new Vector2d(this.p3.getX()+distance, this.p3.getY())
-            );
+    public boolean contains(Block b) {
+        return this.box.contains(b.getLocation().toVector());
+    }
 
-        } else if(blockface == BlockFace.NORTH) {
-            area = new Area(
-                this.name, 
-                this.color, 
-                this.uuid,
-                new Vector2d(p4), 
-                new Vector2d(this.p3.getX(), this.p3.getY() + distance)
-            );
+    public boolean contains(Player p) {
+        return this.box.contains(p.getLocation().toVector());
+    }
 
-        } else if(blockface == BlockFace.WEST) {
-            area = new Area(
-                this.name, 
-                this.color, 
-                this.uuid,
-                new Vector2d(p1), 
-                new Vector2d(this.p4.getX()-distance, this.p4.getY())
-            );
+    public Vector[] getPoints() {
+        return new Vector[]{
+            new Vector(this.box.getMinX(), this.box.getMinZ(), this.box.getMinY()), 
+            new Vector(this.box.getMaxX(), this.box.getMaxZ(), this.box.getMaxY())
+        };
+    }
 
-        }
+    public boolean isValid() {
+        boolean surface = (this.getSurface() > 256);
 
-        return area.getSurface();
+        double x1 = this.box.getMinX();
+        double y1 = this.box.getMinY();
+
+        double x3 = this.box.getMaxX();
+        double y3 = this.box.getMaxY();
+
+        double x2 = x3;
+        double y2 = y1;
+
+        double width = Math.sqrt(Math.pow((x2 - x1), 2) + Math.pow((y2 - y1), 2));
+        double height = Math.sqrt(Math.pow((x3 - x2), 2) + Math.pow((y3 - y2), 2));
+
+        boolean sides = (width > 15 && height > 15);
+
+        return (surface && sides);
     }
 
 }

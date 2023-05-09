@@ -8,8 +8,8 @@ import java.util.UUID;
 import java.awt.Color;
 
 import org.bukkit.entity.Player;
-
-import com.flowpowered.math.vector.Vector2d;
+import org.bukkit.util.BoundingBox;
+import org.bukkit.util.Vector;
 
 import net.philocraft.AreaEssentials;
 import net.philocraft.models.Area;
@@ -61,8 +61,6 @@ public class DatabaseUtil {
             "groupName TEXT NOT NULL, " +
             "p1 TEXT NOT NULL, " +
             "p2 TEXT NOT NULL, " +
-            "p3 TEXT NOT NULL, " +
-            "p4 TEXT NOT NULL, " +
             "mobGriefing BOOLEAN DEFAULT 0, " +
             "doPVP BOOLEAN DEFAULT 0);"
         );
@@ -78,10 +76,12 @@ public class DatabaseUtil {
                 results.getDate("creation").getTime(),
                 Color.decode(results.getString("color")),
                 UUID.fromString(results.getString("uuid")),
-                new Vector2d(Double.parseDouble(results.getString("p1").split("@")[0]), Double.parseDouble(results.getString("p1").split("@")[1])),
-                new Vector2d(Double.parseDouble(results.getString("p2").split("@")[0]), Double.parseDouble(results.getString("p2").split("@")[1])),
-                new Vector2d(Double.parseDouble(results.getString("p3").split("@")[0]), Double.parseDouble(results.getString("p3").split("@")[1])),
-                new Vector2d(Double.parseDouble(results.getString("p4").split("@")[0]), Double.parseDouble(results.getString("p4").split("@")[1])),
+                
+                BoundingBox.of(
+                    new Vector(Double.parseDouble(results.getString("p1").split("@")[0]), -64, Double.parseDouble(results.getString("p1").split("@")[1])),
+                    new Vector(Double.parseDouble(results.getString("p2").split("@")[0]), 320, Double.parseDouble(results.getString("p2").split("@")[1]))
+                ),
+                
                 results.getBoolean("mobGriefing"),
                 results.getBoolean("doPVP")
             );
@@ -174,8 +174,6 @@ public class DatabaseUtil {
                 "groupName, " +
                 "p1, " +
                 "p2, " +
-                "p3, " +
-                "p4, " +
                 "mobGriefing, " +
                 "doPVP" +
             ") VALUES('" +
@@ -186,9 +184,7 @@ public class DatabaseUtil {
                 area.getLeaveMessage() + ", '" +
                 area.getGroupName() + "', '" +
                 area.getPoints()[0].getX() + "@" + area.getPoints()[0].getY() + "', '" +
-                area.getPoints()[1].getX() + "@" + area.getPoints()[1].getY() + "', '" +
-                area.getPoints()[2].getX() + "@" + area.getPoints()[2].getY() + "', '" +
-                area.getPoints()[3].getX() + "@" + area.getPoints()[3].getY() + "', " +
+                area.getPoints()[1].getX() + "@" + area.getPoints()[1].getY() + "', " +
                 area.getPermissions("mobGriefing") + ", " +
                 area.getPermissions("doPVP") + "" +
             ");"

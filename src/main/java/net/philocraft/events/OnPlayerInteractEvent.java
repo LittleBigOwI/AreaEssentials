@@ -3,7 +3,6 @@ package net.philocraft.events;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -11,45 +10,55 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
-
-import com.flowpowered.math.vector.Vector2d;
+import org.bukkit.util.BoundingBox;
+import org.bukkit.util.Vector;
 
 import dev.littlebigowl.api.constants.Colors;
 import net.philocraft.AreaEssentials;
 import net.philocraft.components.AreaCreateComponent;
+import net.philocraft.errors.AreaExistsException;
 import net.philocraft.models.Area;
 import net.philocraft.utils.DatabaseUtil;
 
 public class OnPlayerInteractEvent implements Listener {
 
-    private static HashMap<Player, ArrayList<Vector2d>> corners = new HashMap<>();
+    private static HashMap<Player, ArrayList<Block>> corners = new HashMap<>();
 
-    private static void addCorner(Player player, Location location, int index) {
-        ArrayList<Vector2d> playerCorners = corners.get(player);
+    private static void addCorner(Player player, Block block, int index) {
+        ArrayList<Block> playerCorners = corners.get(player);
         if(playerCorners == null) {
             playerCorners = new ArrayList<>();
         }
-
-        Vector2d corner = new Vector2d(location.getBlockX(), location.getBlockZ());
         
         if(playerCorners.size() > index && playerCorners.get(index) != null) {
             playerCorners.remove(index);
         }
-        playerCorners.add(index, corner);
 
+        if(playerCorners.size() < 1 && index == 1) {
+            playerCorners.add(0, block);
+        }
+
+        playerCorners.add(index, block);
         corners.put(player, playerCorners);
     }
 
     private static Area setupArea(Player player) {
-        Area area = new Area(
-            player.getName() + "-Area-" + DatabaseUtil.getAreas(player).size(), 
-            AreaEssentials.api.scoreboard.getEssentialsTeam(player).getColor(), 
-            player.getUniqueId(), 
+        BoundingBox boundingBox = BoundingBox.of(
             corners.get(player).get(0),
             corners.get(player).get(1)
         );
 
-        if(area.getSurface() < 225) {
+        boundingBox.expand(new Vector(0, 320, 0));
+        boundingBox.expand(new Vector(0, -64, 0));
+
+        Area area = new Area(
+            player.getName() + "-" + DatabaseUtil.getAreas(player).size(), 
+            AreaEssentials.api.scoreboard.getEssentialsTeam(player).getColor(), 
+            player.getUniqueId(), 
+            boundingBox
+        );
+
+        if(!area.isValid()) {
             return null;
         }
 
@@ -58,44 +67,47 @@ public class OnPlayerInteractEvent implements Listener {
     
     @EventHandler
     public void OnPlayerInteract(PlayerInteractEvent event) {
-        Action act = event.getAction();
+        Action action = event.getAction();
         Player player = event.getPlayer();
-        Block block = event.getClickedBlock();
-        
-        Location location = null;
-        if(block != null) {
-            location = block.getLocation();
-        }
+        Block block = event.getClickedBlock().getRelative(event.getBlockFace());
 
         if(!DatabaseUtil.getClaimMode(player) || block == null) {
             return;
         }
-        
-        String loc = location.getBlockX() + " " + location.getBlockZ();
 
-        if(act == Action.LEFT_CLICK_BLOCK) {
-            OnPlayerInteractEvent.addCorner(player, location, 0);
-            player.sendMessage(Colors.SUCCESS.getChatColor() + "Position #1 set to " + loc + ".");
+        int i = 0;
+        while(i < DatabaseUtil.getAreas().size() && !DatabaseUtil.getAreas().get(i).contains(block)) {
+            i++;
+        }
+
+        if(i != DatabaseUtil.getAreas().size() && event.getHand().equals(EquipmentSlot.HAND)) {
+            new AreaExistsException().sendCause(player);
+            return;
+        }
+
+        if(action == Action.LEFT_CLICK_BLOCK) {
+            OnPlayerInteractEvent.addCorner(player, block, 0);
+            player.sendMessage(Colors.SUCCESS.getChatColor() + "Position #1 is set.");
 
             if(corners.get(player).size() == 2 && OnPlayerInteractEvent.setupArea(player) != null) {
                 new AreaCreateComponent(player, "Area selected! Click this message to create it!").send();
                 DatabaseUtil.addPotentialArea(player, OnPlayerInteractEvent.setupArea(player));
             
             } else if(corners.get(player).size() == 2 && OnPlayerInteractEvent.setupArea(player) == null) {
-                player.sendMessage(Colors.FAILURE.getChatColor() + "Area is to small! Area needs to be at least 15x15.");
+                player.sendMessage(Colors.FAILURE.getChatColor() + "Area is to small! It needs to be at least 16x16.");
 
             }
 
-        } else if(act == Action.RIGHT_CLICK_BLOCK && event.getHand().equals(EquipmentSlot.HAND)) {            
-            OnPlayerInteractEvent.addCorner(player, location, 1);
-            player.sendMessage(Colors.SUCCESS.getChatColor() + "Position #2 set to " + loc + ".");
+        } else if(action == Action.RIGHT_CLICK_BLOCK && event.getHand().equals(EquipmentSlot.HAND)) {            
+            OnPlayerInteractEvent.addCorner(player, block, 1);
+            player.sendMessage(Colors.SUCCESS.getChatColor() + "Position #2 is set.");
 
             if(corners.get(player).size() == 2 && OnPlayerInteractEvent.setupArea(player) != null) {
                 new AreaCreateComponent(player, "Area selected! Click this message to create it!").send();
                 DatabaseUtil.addPotentialArea(player, OnPlayerInteractEvent.setupArea(player));
             
             } else if(corners.get(player).size() == 2 && OnPlayerInteractEvent.setupArea(player) == null) {
-                player.sendMessage(Colors.FAILURE.getChatColor() + "Area is to small! Area needs to be at least 15x15.");
+                player.sendMessage(Colors.FAILURE.getChatColor() + "Area is to small! It needs to be at least 16x16.");
 
             }
         }
