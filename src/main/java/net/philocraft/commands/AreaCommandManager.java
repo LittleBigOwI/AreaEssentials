@@ -11,7 +11,9 @@ import org.bukkit.entity.Player;
 
 import dev.littlebigowl.api.errors.InvalidSenderException;
 import net.philocraft.commands.subcommands.CreateSubcommand;
+import net.philocraft.commands.subcommands.HideSubcommand;
 import net.philocraft.commands.subcommands.InfoSubcommand;
+import net.philocraft.commands.subcommands.ShowSubcommand;
 import net.philocraft.models.Subcommand;
 
 public class AreaCommandManager implements CommandExecutor, TabCompleter {
@@ -21,6 +23,8 @@ public class AreaCommandManager implements CommandExecutor, TabCompleter {
     public AreaCommandManager() {
         this.subcommands.add(new CreateSubcommand());
         this.subcommands.add(new InfoSubcommand());
+        this.subcommands.add(new ShowSubcommand());
+        this.subcommands.add(new HideSubcommand());
     }
 
     public ArrayList<Subcommand> getSubCommands() {

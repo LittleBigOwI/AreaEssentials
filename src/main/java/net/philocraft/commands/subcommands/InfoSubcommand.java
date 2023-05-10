@@ -53,7 +53,7 @@ public class InfoSubcommand extends Subcommand {
         dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+2"));
 
         String info = "" +
-            ChatColor.WHITE + ChatColor.BOLD + "Area Info :" + ChatColor.RESET + "\n" +
+            ChatColor.WHITE + "Area Info :" + ChatColor.RESET + "\n" +
             Colors.INFO.getChatColor() + "[Owner] - " + Colors.MAJOR.getChatColor() + Bukkit.getPlayer(area.getUUID()).getName() + "\n" +
             Colors.INFO.getChatColor() + "[Name] - " + Colors.MAJOR.getChatColor() + area.getName() + "\n" +
             Colors.INFO.getChatColor() + "[Surface] - " + Colors.MAJOR.getChatColor() + area.getSurface() + "\n" +

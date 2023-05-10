@@ -2,13 +2,19 @@ package net.philocraft.models;
 
 import java.awt.Color;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.util.BoundingBox;
 import org.bukkit.util.Vector;
+
+import com.flowpowered.math.vector.Vector2d;
 
 import net.philocraft.AreaEssentials;
 
@@ -45,6 +51,68 @@ public class Area {
 
     public Area(String name, Color color, UUID uuid, BoundingBox box) {
         this(name, null, null, uuid.toString(), Instant.now().getEpochSecond(), color, uuid, box, false, false);
+    }
+
+    private boolean hasAirBlocksAbove(World world, Location location) {
+        return (
+            !world.getBlockAt((int)location.getX(), (int)location.getY(), (int)location.getZ()).getType().equals(Material.AIR) && 
+            world.getBlockAt((int)location.getX(), (int)location.getY()+1, (int)location.getZ()).getType().equals(Material.AIR) &&
+            world.getBlockAt((int)location.getX(), (int)location.getY()+2, (int)location.getZ()).getType().equals(Material.AIR)
+        );
+    }
+
+    private void drawLineX(Player player, Vector2d v1, Vector2d v2, AreaAction action) {
+        for(double i = v1.getX(); i < v2.getX(); i++) {
+            
+            Location location = new Location(player.getWorld(), i, -64, v1.getY());
+            ArrayList<Location> possibleBlockLocations = new ArrayList<>();
+
+            for(int j = -64; j <= 320; j++) {
+                possibleBlockLocations.add(new Location(player.getWorld(), i, j, v1.getY()));
+            }
+
+            for(Location loc : possibleBlockLocations) {
+                if(this.hasAirBlocksAbove(player.getWorld(), loc) && loc.distance(player.getLocation()) < location.distance(player.getLocation())) {
+                    location = loc;
+                }
+            }
+            
+            if(action == AreaAction.SHOW) {
+                player.sendBlockChange(location, Material.GOLD_BLOCK.createBlockData());
+
+            } else {
+                player.sendBlockChange(location, player.getWorld().getBlockData(location));
+
+            }
+        }
+    }
+
+    private void drawLineY(Player player, Vector2d v1, Vector2d v2, AreaAction action) {
+        
+        for(double i = v1.getY(); i < v2.getY(); i++) {
+            
+            Location location = new Location(player.getWorld(), v1.getX(), -64, i);
+            ArrayList<Location> possibleBlockLocations = new ArrayList<>();
+            
+            for(int j = -64; j <= 320; j++) {
+                possibleBlockLocations.add(new Location(player.getWorld(), v1.getX(), j, i));
+            }
+
+            for(Location loc : possibleBlockLocations) {
+                if(this.hasAirBlocksAbove(player.getWorld(), loc) && loc.distance(player.getLocation()) < location.distance(player.getLocation())) {
+                    location = loc;
+                }
+            }
+
+            if(action == AreaAction.SHOW) {
+                player.sendBlockChange(location, Material.GOLD_BLOCK.createBlockData());
+
+            } else {
+                player.sendBlockChange(location, player.getWorld().getBlockData(location));
+
+            }
+            
+        }
     }
 
     public String getName() {
@@ -110,6 +178,60 @@ public class Area {
         );
 
         return (surface && sides);
+    }
+
+    public void show(Player player) {
+        Vector2d p1 = new Vector2d(this.box.getMinX(), this.box.getMinZ());
+        Vector2d p2 = new Vector2d(this.box.getMaxX()-1, this.box.getMinZ());
+        Vector2d p3 = new Vector2d(this.box.getMaxX()-1, this.box.getMaxZ()-1);
+        Vector2d p4 = new Vector2d(this.box.getMinX(), this.box.getMaxZ()-1);
+
+        drawLineX(player, p1, p2, AreaAction.SHOW);
+        drawLineY(player, p2, p3, AreaAction.SHOW);
+        drawLineX(player, p4, p3, AreaAction.SHOW);
+        drawLineY(player, p1, p4, AreaAction.SHOW);
+
+        Location location = new Location(player.getWorld(), p3.getX(), -64, p3.getY());
+        ArrayList<Location> possibleBlockLocations = new ArrayList<>();
+        
+        for(int j = -64; j <= 320; j++) {
+            possibleBlockLocations.add(new Location(player.getWorld(), p3.getX(), j, p3.getY()));
+        }
+
+        for(Location loc : possibleBlockLocations) {
+            if(this.hasAirBlocksAbove(player.getWorld(), loc) && loc.distance(player.getLocation()) < location.distance(player.getLocation())) {
+                location = loc;
+            }
+        }
+
+        player.sendBlockChange(location, Material.GOLD_BLOCK.createBlockData());        
+    }
+
+    public void hide(Player player) {
+        Vector2d p1 = new Vector2d(this.box.getMinX(), this.box.getMinZ());
+        Vector2d p2 = new Vector2d(this.box.getMaxX()-1, this.box.getMinZ());
+        Vector2d p3 = new Vector2d(this.box.getMaxX()-1, this.box.getMaxZ()-1);
+        Vector2d p4 = new Vector2d(this.box.getMinX(), this.box.getMaxZ()-1);
+
+        drawLineX(player, p1, p2, AreaAction.HIDE);
+        drawLineY(player, p2, p3, AreaAction.HIDE);
+        drawLineX(player, p4, p3, AreaAction.HIDE);
+        drawLineY(player, p1, p4, AreaAction.HIDE);
+
+        Location location = new Location(player.getWorld(), p3.getX(), -64, p3.getY());
+        ArrayList<Location> possibleBlockLocations = new ArrayList<>();
+        
+        for(int j = -64; j <= 320; j++) {
+            possibleBlockLocations.add(new Location(player.getWorld(), p3.getX(), j, p3.getY()));
+        }
+
+        for(Location loc : possibleBlockLocations) {
+            if(this.hasAirBlocksAbove(player.getWorld(), loc) && loc.distance(player.getLocation()) < location.distance(player.getLocation())) {
+                location = loc;
+            }
+        }
+
+        player.sendBlockChange(location, player.getWorld().getBlockData(location));      
     }
 
 }
