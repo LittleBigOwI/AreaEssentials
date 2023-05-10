@@ -34,7 +34,7 @@ public class InfoSubcommand extends Subcommand {
 
     @Override
     public boolean perform(Player player, String[] args) {
-        if(args.length > 1) {
+        if(args.length != 1) {
             return new InvalidArgumentsException().sendCause(player);
         }
 

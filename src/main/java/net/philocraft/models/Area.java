@@ -1,6 +1,7 @@
 package net.philocraft.models;
 
 import java.awt.Color;
+import java.sql.SQLException;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,6 +18,7 @@ import org.bukkit.util.Vector;
 import com.flowpowered.math.vector.Vector2d;
 
 import net.philocraft.AreaEssentials;
+import net.philocraft.utils.DatabaseUtil;
 
 public class Area {
     
@@ -63,7 +65,7 @@ public class Area {
 
     private void drawLineX(Player player, Vector2d v1, Vector2d v2, AreaAction action) {
         for(double i = v1.getX(); i < v2.getX(); i++) {
-            
+
             Location location = new Location(player.getWorld(), i, -64, v1.getY());
             ArrayList<Location> possibleBlockLocations = new ArrayList<>();
 
@@ -113,6 +115,25 @@ public class Area {
             }
             
         }
+    }
+
+    private CardinalDirection getDirection(Player p) {
+        double y = p.getLocation().getYaw();
+
+        if(y >= 135 || y < -135){
+            return CardinalDirection.NORTH;
+        }
+        if(y >= -135 && y < -45){
+            return CardinalDirection.EAST;
+        }
+        if(y >= -45 && y < 45){
+           return CardinalDirection.SOUTH;
+        }
+        if(y >= 45 && y < 135){
+            return CardinalDirection.WEST;
+        }
+
+        return null;
     }
 
     public String getName() {
@@ -232,6 +253,32 @@ public class Area {
         }
 
         player.sendBlockChange(location, player.getWorld().getBlockData(location));      
+    }
+
+    public double expand(Player player, int amount) {
+        this.hide(player);
+        
+        CardinalDirection direction = this.getDirection(player);
+        BoundingBox newBox = this.box.clone().expand(direction.asVector(), amount);
+        
+        double currentSurface = this.getSurface();
+        double newSurface = newBox.getWidthX() * newBox.getWidthZ();
+
+        double cost = newSurface - currentSurface;
+        this.box.expand(direction.asVector(), amount);
+        
+        this.show(player);
+
+        try {
+            DatabaseUtil.saveArea(this);
+        } catch (SQLException e) {
+            AreaEssentials.getPlugin().getLogger().severe("Couldn't save area : " + e.getMessage());
+        }
+        return cost;
+    }
+
+    public double shrink(Player player, int amount) {
+        return this.expand(player, amount*-1)*-1;
     }
 
 }

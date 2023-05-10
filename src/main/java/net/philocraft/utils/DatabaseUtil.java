@@ -191,4 +191,32 @@ public class DatabaseUtil {
         );
     }
 
+    public static void saveArea(Area area) throws SQLException {
+        Color areaColor = area.getColor();
+
+        String enterMessage = null;
+        if(area.getEnterMessage() != null) {
+            enterMessage = "'" + area.getEnterMessage() + "'";
+        }
+
+        String leaveMessage = null;
+        if(area.getLeaveMessage() != null) {
+            leaveMessage = "'" + area.getLeaveMessage() + "'";
+        }
+
+        AreaEssentials.api.database.update(
+            "UPDATE Areas SET " +
+            "name='" + area.getName() + "', " + 
+            "color='" + String.format("#%02x%02x%02x", areaColor.getRed(), areaColor.getGreen(), areaColor.getBlue()) + "', " +
+            "enterMessage=" + enterMessage + ", " +
+            "leaveMessage=" + leaveMessage + ", " +
+            "groupName='" + area.getGroupName() + "', " +
+            "p1='" + area.getPoints()[0].getX() + "@" + area.getPoints()[0].getY() + "', " +
+            "p2='" + area.getPoints()[1].getX() + "@" + area.getPoints()[1].getY() + "', " +
+            "mobGriefing=" + area.getPermission("mobGriefing") + ", " +
+            "doPVP=" + area.getPermission("doPVP") + " " +
+            "WHERE uuid='" + area.getUUID() + "';"
+        );
+    }
+
 }

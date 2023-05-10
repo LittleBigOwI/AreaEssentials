@@ -54,7 +54,7 @@ public class ClaimCommand implements CommandExecutor, TabCompleter {
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
         if(args.length == 1) {
-            return new ArrayList<>(Arrays.asList("on", "off", "blocks"));
+            return new ArrayList<>(Arrays.asList("on", "off"));
         }
         return new ArrayList<>();
     }
