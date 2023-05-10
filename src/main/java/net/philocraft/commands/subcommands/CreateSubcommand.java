@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
 import dev.littlebigowl.api.constants.Colors;
 import dev.littlebigowl.api.errors.InvalidArgumentsException;
 import net.philocraft.AreaEssentials;
-import net.philocraft.errors.NoPotentialAreaException;
+import net.philocraft.errors.NoAreaException;
 import net.philocraft.models.Area;
 import net.philocraft.models.Subcommand;
 import net.philocraft.utils.DatabaseUtil;
@@ -38,7 +38,7 @@ public class CreateSubcommand extends Subcommand {
         Area potentialArea = DatabaseUtil.getPotentialArea(player);
         
         if(potentialArea == null) {
-            return new NoPotentialAreaException().sendCause(player);
+            return new NoAreaException("Could not find corners for area.").sendCause(player);
         }
 
         try {

@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 
 import dev.littlebigowl.api.errors.InvalidSenderException;
 import net.philocraft.commands.subcommands.CreateSubcommand;
+import net.philocraft.commands.subcommands.InfoSubcommand;
 import net.philocraft.models.Subcommand;
 
 public class AreaCommandManager implements CommandExecutor, TabCompleter {
@@ -19,6 +20,18 @@ public class AreaCommandManager implements CommandExecutor, TabCompleter {
 
     public AreaCommandManager() {
         this.subcommands.add(new CreateSubcommand());
+        this.subcommands.add(new InfoSubcommand());
+    }
+
+    public ArrayList<Subcommand> getSubCommands() {
+        return this.subcommands;
+    }
+
+    public ArrayList<String> getSubcommandsNames() {
+        ArrayList<String> names = new ArrayList<>();
+        this.subcommands.forEach(subcommand -> names.add(subcommand.getName()));
+
+        return names;
     }
 
     @Override
@@ -43,11 +56,13 @@ public class AreaCommandManager implements CommandExecutor, TabCompleter {
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
-        return new ArrayList<>();
-    }
+        if(args.length == 1) {
+            return this.getSubcommandsNames();
 
-    public ArrayList<Subcommand> getSubCommands() {
-        return this.subcommands;
+        } else {
+            return new ArrayList<>();
+            
+        }
     }
     
 }

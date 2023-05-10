@@ -69,11 +69,13 @@ public class OnPlayerInteractEvent implements Listener {
     public void OnPlayerInteract(PlayerInteractEvent event) {
         Action action = event.getAction();
         Player player = event.getPlayer();
-        Block block = event.getClickedBlock().getRelative(event.getBlockFace());
+        Block block = event.getClickedBlock();
 
         if(!DatabaseUtil.getClaimMode(player) || block == null) {
             return;
         }
+
+        block = block.getRelative(event.getBlockFace());
 
         int i = 0;
         while(i < DatabaseUtil.getAreas().size() && !DatabaseUtil.getAreas().get(i).contains(block)) {

@@ -73,24 +73,12 @@ public class Area {
         return this.uuid;
     }
 
-    public boolean getPermissions(String permission) {
+    public boolean getPermission(String permission) {
         return this.permissions.get(permission);
     }
 
     public double getSurface() {
-        double x1 = this.box.getMinX();
-        double y1 = this.box.getMinY();
-
-        double x3 = this.box.getMaxX();
-        double y3 = this.box.getMaxY();
-
-        double x2 = x3;
-        double y2 = y1;
-
-        double width = Math.sqrt(Math.pow((x2 - x1), 2) + Math.pow((y2 - y1), 2));
-        double height = Math.sqrt(Math.pow((x3 - x2), 2) + Math.pow((y3 - y2), 2));
-
-        return width*height;
+        return this.box.getWidthX() * this.box.getWidthZ();
     }
 
     public boolean contains(Vector v) {
@@ -114,20 +102,7 @@ public class Area {
 
     public boolean isValid() {
         boolean surface = (this.getSurface() > 256);
-
-        double x1 = this.box.getMinX();
-        double y1 = this.box.getMinY();
-
-        double x3 = this.box.getMaxX();
-        double y3 = this.box.getMaxY();
-
-        double x2 = x3;
-        double y2 = y1;
-
-        double width = Math.sqrt(Math.pow((x2 - x1), 2) + Math.pow((y2 - y1), 2));
-        double height = Math.sqrt(Math.pow((x3 - x2), 2) + Math.pow((y3 - y2), 2));
-
-        boolean sides = (width > 15 && height > 15);
+        boolean sides = (this.box.getWidthX() > 15 && this.box.getWidthZ() > 15);
 
         return (surface && sides);
     }

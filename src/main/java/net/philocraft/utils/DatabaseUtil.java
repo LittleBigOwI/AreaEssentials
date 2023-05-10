@@ -185,8 +185,8 @@ public class DatabaseUtil {
                 area.getGroupName() + "', '" +
                 area.getPoints()[0].getX() + "@" + area.getPoints()[0].getY() + "', '" +
                 area.getPoints()[1].getX() + "@" + area.getPoints()[1].getY() + "', " +
-                area.getPermissions("mobGriefing") + ", " +
-                area.getPermissions("doPVP") + "" +
+                area.getPermission("mobGriefing") + ", " +
+                area.getPermission("doPVP") + "" +
             ");"
         );
     }

@@ -4,15 +4,15 @@ import org.bukkit.command.CommandSender;
 
 import dev.littlebigowl.api.constants.Colors;
 
-public class NoPotentialAreaException {
+public class NoAreaException {
     
     private String cause;
 
-    public NoPotentialAreaException() {
-        this.cause = Colors.FAILURE.getChatColor() + "Could not create Area.";
+    public NoAreaException() {
+        this.cause = Colors.FAILURE.getChatColor() + "Could not find area.";
     }
 
-    public NoPotentialAreaException(String cause) {
+    public NoAreaException(String cause) {
         this.cause = Colors.FAILURE.getChatColor() + cause;
     }
 
