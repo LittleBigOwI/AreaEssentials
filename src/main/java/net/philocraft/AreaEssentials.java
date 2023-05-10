@@ -10,6 +10,7 @@ import dev.littlebigowl.api.EssentialsAPI;
 import net.philocraft.commands.AreaCommandManager;
 import net.philocraft.commands.ClaimCommand;
 import net.philocraft.events.OnPlayerInteractEvent;
+import net.philocraft.utils.ClaimUtil;
 import net.philocraft.utils.DatabaseUtil;
 
 public class AreaEssentials extends JavaPlugin {
@@ -38,6 +39,7 @@ public class AreaEssentials extends JavaPlugin {
         });
 
         plugin = this;
+        ClaimUtil.checkPlaytimeBlocks();
 
         //!REGISTER EVENTS
         this.getServer().getPluginManager().registerEvents(new OnPlayerInteractEvent(), this);
