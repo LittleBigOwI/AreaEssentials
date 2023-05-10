@@ -10,6 +10,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.BoundingBox;
 import org.bukkit.util.Vector;
 
+import net.philocraft.AreaEssentials;
+
 public class Area {
     
     private String name;
@@ -101,8 +103,11 @@ public class Area {
     }
 
     public boolean isValid() {
-        boolean surface = (this.getSurface() > 256);
-        boolean sides = (this.box.getWidthX() > 15 && this.box.getWidthZ() > 15);
+        boolean surface = (this.getSurface() > AreaEssentials.api.areas.getMinAreaSurface());
+        boolean sides = (
+            this.box.getWidthX() > AreaEssentials.api.areas.getMinAreaWidthX() && 
+            this.box.getWidthZ() > AreaEssentials.api.areas.getMinAreaWidthY()
+        );
 
         return (surface && sides);
     }
