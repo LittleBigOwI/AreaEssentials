@@ -5,15 +5,15 @@ A BlueMap compatible claim plugin.
 
 ## Commands & Subcommands
 
-- `/claim` (identical to /claim on)
+- `/claim`
 - `/claim on`
 - `/claim off`
 - `/claim info`
 - `/claim blocks`
 - `/area expand [amount]`
+- `/area shrink [amount]`
 - `/area edit color [color]`
 - `/area edit name [name]`
-- `/area edit description [description]`
 - `/area edit joinMessage [message]`
 - `/area edit leaveMessage [message]`
 - `/area edit colorgroupName [groupName]`
