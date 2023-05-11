@@ -92,6 +92,13 @@ public class SetWarpCommand implements CommandExecutor, TabCompleter {
             
         } else {
             warp = new Warp(player.getUniqueId(), name, location);
+            
+            try {
+                WarpUtil.saveWarp(warp);
+            } catch (Exception e) {
+                AreaEssentials.getPlugin().getLogger().severe("Couldn't save warp : " + e.getMessage());
+            }
+
             player.sendMessage(Colors.SUCCESS.getChatColor() + "Successfully created new " + Colors.INFO.getChatColor() + warp.getName() + Colors.SUCCESS.getChatColor() + " warp.");
 
         }
