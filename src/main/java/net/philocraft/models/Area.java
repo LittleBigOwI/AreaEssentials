@@ -331,6 +331,12 @@ public class Area {
         this.leaveMessage = message;
     }
 
+    public void setPermission(String permission, boolean value) {
+        if(this.permissions.keySet().contains(permission)) {
+            this.permissions.put(permission, value);
+        }
+    }
+
     public void draw() {
         int[] borderColor = new int[]{this.color.getRed(), this.color.getGreen(), this.color.getBlue()};
         int[] fillcolor = new int[3];
