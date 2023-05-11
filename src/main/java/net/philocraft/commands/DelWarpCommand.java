@@ -29,7 +29,7 @@ public class DelWarpCommand implements CommandExecutor, TabCompleter {
             return new InvalidSenderException("You need to be a player to use this command.").sendCause(sender);
         }
 
-        if(args.length != 1 && args.length != 2) {
+        if(args.length != 0 && args.length != 1) {
             return new InvalidArgumentsException().sendCause(sender);
         }
 
@@ -53,11 +53,9 @@ public class DelWarpCommand implements CommandExecutor, TabCompleter {
         if(warp == null) {
             return new WarpNotFoundException().sendCause(sender);
         }
-
-        args[0] = warp.getName();
         
-        if(args.length == 2) {
-            if(args[1].equals("confirm")) {
+        if(args.length == 1) {
+            if(args[0].equals("confirm")) {
                 try {
                     WarpUtil.removeWarp(warp);
                 } catch (SQLException e) {
@@ -66,19 +64,19 @@ public class DelWarpCommand implements CommandExecutor, TabCompleter {
 
                 player.sendMessage(Colors.SUCCESS.getChatColor() + "Successfully deleted your " + Colors.INFO.getChatColor() + warp.getName() + Colors.SUCCESS.getChatColor() + " warp.");
 
-            } else if(args[1].equals("cancel")) {
+            } else if(args[0].equals("cancel")) {
                 player.sendMessage(Colors.SUCCESS.getChatColor() + "Successfully canceled deletion.");
 
             } else {
                 return new InvalidArgumentsException().sendCause(sender);
             }
 
-        } else if(args.length == 1){
+        } else if(args.length == 0){
             new WarningComponent(
                 player,
                 new String[]{"You are about to delete your ", warp.getName(), " warp. Proceed? "},
-                "/delwarp " + warp.getName() + " confirm",
-                "/delwarp " + warp.getName() + " cancel"
+                "/delwarp confirm",
+                "/delwarp cancel"
             ).send();
             
         }

@@ -66,6 +66,13 @@ public class SetWarpCommand implements CommandExecutor, TabCompleter {
             if(args[1].equals("override")) {
                 warp.setLocation(location);
                 warp.setName(args[0]);
+
+                try {
+                    WarpUtil.saveWarp(warp);
+                } catch (Exception e) {
+                    AreaEssentials.getPlugin().getLogger().severe("Couldn't save warp : " + e.getMessage());
+                }
+
                 player.sendMessage(Colors.SUCCESS.getChatColor() + "Successfully overridden your " + Colors.INFO.getChatColor() + warp.getName() + Colors.SUCCESS.getChatColor() + " warp.");
 
             } else if(args[1].equals("cancel")) {
@@ -87,12 +94,6 @@ public class SetWarpCommand implements CommandExecutor, TabCompleter {
             warp = new Warp(player.getUniqueId(), name, location);
             player.sendMessage(Colors.SUCCESS.getChatColor() + "Successfully created new " + Colors.INFO.getChatColor() + warp.getName() + Colors.SUCCESS.getChatColor() + " warp.");
 
-        }
-
-        try {
-            WarpUtil.saveWarp(warp);
-        } catch (Exception e) {
-            AreaEssentials.getPlugin().getLogger().severe("Couldn't save warp : " + e.getMessage());
         }
 
         return true;
