@@ -29,7 +29,7 @@ public class CreateSubcommand extends Subcommand {
 
     @Override
     public String getSyntax() {
-        return "/area create";
+        return "/area create <optional:areaName>";
     }
 
     @Override

@@ -2,8 +2,8 @@ package net.philocraft.models;
 
 import java.awt.Color;
 import java.sql.SQLException;
-import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -52,7 +52,7 @@ public class Area {
     }
 
     public Area(String name, Color color, UUID uuid, BoundingBox box) {
-        this(name, null, null, uuid.toString(), Instant.now().getEpochSecond(), color, uuid, box, false, false);
+        this(name, null, null, uuid.toString(), new Date().getTime(), color, uuid, box, false, false);
     }
 
     private boolean hasAirBlocksAbove(World world, Location location) {

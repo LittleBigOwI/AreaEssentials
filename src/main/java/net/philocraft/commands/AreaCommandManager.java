@@ -14,6 +14,7 @@ import net.philocraft.commands.subcommands.CreateSubcommand;
 import net.philocraft.commands.subcommands.ExpandSubcommand;
 import net.philocraft.commands.subcommands.HideSubcommand;
 import net.philocraft.commands.subcommands.InfoSubcommand;
+import net.philocraft.commands.subcommands.RemoveSubommand;
 import net.philocraft.commands.subcommands.ShowSubcommand;
 import net.philocraft.commands.subcommands.ShrinkSubcommand;
 import net.philocraft.models.Subcommand;
@@ -24,11 +25,15 @@ public class AreaCommandManager implements CommandExecutor, TabCompleter {
 
     public AreaCommandManager() {
         this.subcommands.add(new CreateSubcommand());
-        this.subcommands.add(new InfoSubcommand());
+        this.subcommands.add(new RemoveSubommand());
+
         this.subcommands.add(new ShowSubcommand());
         this.subcommands.add(new HideSubcommand());
+
         this.subcommands.add(new ExpandSubcommand());
         this.subcommands.add(new ShrinkSubcommand());
+        
+        this.subcommands.add(new InfoSubcommand());
     }
 
     public ArrayList<Subcommand> getSubCommands() {

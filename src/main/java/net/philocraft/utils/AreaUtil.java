@@ -189,4 +189,17 @@ public class AreaUtil {
         );
     }
 
+    public static void removeArea(Area area) throws SQLException {
+        
+        ArrayList<Area> playerAreas = AreaUtil.areas.get(area.getUUID());
+        for(int i = 0; i < playerAreas.size(); i++) {
+            if(playerAreas.get(i).getName().equals(area.getName())) {
+                playerAreas.remove(i);
+            }
+        }
+
+        AreaUtil.areas.put(area.getUUID(), playerAreas);
+        AreaEssentials.api.database.update("DELETE FROM Areas WHERE uuid='" + area.getUUID() + "' AND name='" + area.getName() + "';");
+    }
+
 }

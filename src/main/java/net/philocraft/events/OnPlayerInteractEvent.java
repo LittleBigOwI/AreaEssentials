@@ -3,6 +3,7 @@ package net.philocraft.events;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -58,6 +59,8 @@ public class OnPlayerInteractEvent implements Listener {
             player.getUniqueId(), 
             boundingBox
         );
+
+        Bukkit.getLogger().warning(area.getCreationDate() + "");
 
         if(!area.isValid()) {
             return null;

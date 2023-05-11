@@ -8,12 +8,13 @@ A BlueMap compatible claim plugin.
 - `/claim`
 - `/claim on`
 - `/claim off`
-- `/claim info`
 - `/claim blocks`
 - `/area show`
+- `/area info`
 - `/area hide`
 - `/area expand [amount]`
 - `/area shrink [amount]`
+- `/area remove [areaName]`
 - `/area create [Optional:AreaName]`
 - `/area edit color [color]`
 - `/area edit name [name]`
