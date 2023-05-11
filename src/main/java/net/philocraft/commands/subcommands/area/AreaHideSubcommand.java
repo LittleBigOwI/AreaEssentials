@@ -1,4 +1,4 @@
-package net.philocraft.commands.subcommands;
+package net.philocraft.commands.subcommands.area;
 
 import org.bukkit.entity.Player;
 
@@ -8,21 +8,21 @@ import net.philocraft.models.Area;
 import net.philocraft.models.Subcommand;
 import net.philocraft.utils.AreaUtil;
 
-public class ShowSubcommand extends Subcommand {
+public class AreaHideSubcommand extends Subcommand {
 
     @Override
     public String getName() {
-        return "show";
+        return "hide";
     }
 
     @Override
     public String getDescription() {
-        return "Displays an areas boundaries";
+        return "Hides an areas boundaries";
     }
 
     @Override
     public String getSyntax() {
-        return "/area show";
+        return "/area hide";
     }
 
     @Override
@@ -42,8 +42,8 @@ public class ShowSubcommand extends Subcommand {
 
         Area area = AreaUtil.getAreas().get(i);
 
-        area.show(player);
+        area.hide(player);
         return true;
     }
-
+    
 }

@@ -1,31 +1,31 @@
-package net.philocraft.commands.subcommands;
+package net.philocraft.commands.subcommands.area;
 
 import org.bukkit.entity.Player;
 
 import dev.littlebigowl.api.constants.Colors;
 import dev.littlebigowl.api.errors.InvalidArgumentsException;
+import net.philocraft.errors.AreaTooSmallException;
 import net.philocraft.errors.NoAreaException;
-import net.philocraft.errors.NotEnoughClaimsException;
 import net.philocraft.models.Area;
 import net.philocraft.models.Subcommand;
 import net.philocraft.utils.AreaUtil;
 import net.philocraft.utils.ClaimUtil;
 
-public class ExpandSubcommand extends Subcommand {
-
+public class AreaShrinkSubcommand extends Subcommand {
+    
     @Override
     public String getName() {
-        return "expand";
+        return "shrink";
     }
 
     @Override
     public String getDescription() {
-        return "Allows areas to be expanded";
+        return "Allows areas to be shrinked";
     }
 
     @Override
     public String getSyntax() {
-        return "/area expand <distance>";
+        return "/area shrink <distance>";
     }
 
     @Override
@@ -57,17 +57,19 @@ public class ExpandSubcommand extends Subcommand {
         }
 
         if(amount < 0) {
-            return new InvalidArgumentsException("You cannot expand an area by a negative amount.").sendCause(player);
+            return new InvalidArgumentsException("You cannot shrink an area by a negative amount.").sendCause(player);
         }
 
-        int cost = (int)area.expand(player, amount);
+        int cost = (int)area.shrink(player, amount);
+
+        if(cost == -1) {
+            return new AreaTooSmallException().sendCause(player);
+        }
+
+        ClaimUtil.addClaimBlocks(player, amount);      
+        player.sendMessage(Colors.SUCCESS.getChatColor() + "Shrinked " + area.getName() + " by " + amount + " blocks for " + cost + " claim blocks.");
         
-        if(cost > ClaimUtil.getClaimBlocks(player)) {
-            return new NotEnoughClaimsException().sendCause(player);
-        }
-
-        ClaimUtil.addClaimBlocks(player, amount*-1);
-        player.sendMessage(Colors.SUCCESS.getChatColor() + "Expanded " + area.getName() + " by " + amount + " blocks for " + cost + " claim blocks.");
+        area.draw();
         return true;
     }
     

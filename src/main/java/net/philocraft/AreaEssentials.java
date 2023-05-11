@@ -9,6 +9,9 @@ import de.bluecolored.bluemap.api.BlueMapAPI;
 import dev.littlebigowl.api.EssentialsAPI;
 import net.philocraft.commands.AreaCommand;
 import net.philocraft.commands.ClaimCommand;
+import net.philocraft.events.OnEntityChangeBlockEvent;
+import net.philocraft.events.OnEntityDamageEvent;
+import net.philocraft.events.OnEntityExplodeEvent;
 import net.philocraft.events.OnPlayerInteractEvent;
 import net.philocraft.utils.ClaimUtil;
 import net.philocraft.utils.AreaUtil;
@@ -50,6 +53,9 @@ public class AreaEssentials extends JavaPlugin {
         ClaimUtil.checkPlaytimeBlocks();
 
         //!REGISTER EVENTS
+        this.getServer().getPluginManager().registerEvents(new OnEntityChangeBlockEvent(), this);
+        this.getServer().getPluginManager().registerEvents(new OnEntityDamageEvent(), this);
+        this.getServer().getPluginManager().registerEvents(new OnEntityExplodeEvent(), this);
         this.getServer().getPluginManager().registerEvents(new OnPlayerInteractEvent(), this);
 
         //!REGISTER COMMANDS

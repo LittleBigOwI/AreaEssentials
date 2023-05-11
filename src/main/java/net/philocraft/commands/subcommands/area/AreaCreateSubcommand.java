@@ -1,4 +1,4 @@
-package net.philocraft.commands.subcommands;
+package net.philocraft.commands.subcommands.area;
 
 import java.sql.SQLException;
 
@@ -15,7 +15,7 @@ import net.philocraft.models.Subcommand;
 import net.philocraft.utils.AreaUtil;
 import net.philocraft.utils.ClaimUtil;
 
-public class CreateSubcommand extends Subcommand {
+public class AreaCreateSubcommand extends Subcommand {
 
     @Override
     public String getName() {
@@ -52,8 +52,14 @@ public class CreateSubcommand extends Subcommand {
             return new AreaExistsException("You already have an area with that name.").sendCause(player);
         }
 
+        String name = null;
+
         if(args.length == 2 && args[1] != null) {
-            potentialArea.setName(args[1]);
+            name = args[1];
+        }
+
+        if(name != null && name.contains("'") || name.contains("\\") || name.contains("\"")) {
+            return new InvalidArgumentsException("Area names can't contain \\, ' or \" characters.").sendCause(player);
         }
 
         try {
@@ -64,6 +70,7 @@ public class CreateSubcommand extends Subcommand {
         }
         player.sendMessage(Colors.SUCCESS.getChatColor() + "Successfully created new area for " + potentialArea.getSurface() + " claim blocks.");
         
+        potentialArea.draw();
         return true;
     }
     

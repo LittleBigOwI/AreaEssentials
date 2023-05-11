@@ -1,6 +1,7 @@
 package net.philocraft.commands;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.command.Command;
@@ -13,30 +14,33 @@ import dev.littlebigowl.api.constants.Worlds;
 import dev.littlebigowl.api.errors.InvalidArgumentsException;
 import dev.littlebigowl.api.errors.InvalidSenderException;
 import dev.littlebigowl.api.errors.InvalidWorldException;
-import net.philocraft.commands.subcommands.CreateSubcommand;
-import net.philocraft.commands.subcommands.ExpandSubcommand;
-import net.philocraft.commands.subcommands.HideSubcommand;
-import net.philocraft.commands.subcommands.InfoSubcommand;
-import net.philocraft.commands.subcommands.RemoveSubommand;
-import net.philocraft.commands.subcommands.ShowSubcommand;
-import net.philocraft.commands.subcommands.ShrinkSubcommand;
+import net.philocraft.commands.subcommands.area.AreaCreateSubcommand;
+import net.philocraft.commands.subcommands.area.AreaEditSubcommand;
+import net.philocraft.commands.subcommands.area.AreaExpandSubcommand;
+import net.philocraft.commands.subcommands.area.AreaHideSubcommand;
+import net.philocraft.commands.subcommands.area.AreaInfoSubcommand;
+import net.philocraft.commands.subcommands.area.AreaRemoveSubommand;
+import net.philocraft.commands.subcommands.area.AreaShowSubcommand;
+import net.philocraft.commands.subcommands.area.AreaShrinkSubcommand;
 import net.philocraft.models.Subcommand;
+import net.philocraft.utils.AreaUtil;
 
 public class AreaCommand implements CommandExecutor, TabCompleter {
 
     private ArrayList<Subcommand> subcommands = new ArrayList<>();
 
     public AreaCommand() {
-        this.subcommands.add(new CreateSubcommand());
-        this.subcommands.add(new RemoveSubommand());
+        this.subcommands.add(new AreaCreateSubcommand());
+        this.subcommands.add(new AreaRemoveSubommand());
 
-        this.subcommands.add(new ShowSubcommand());
-        this.subcommands.add(new HideSubcommand());
+        this.subcommands.add(new AreaShowSubcommand());
+        this.subcommands.add(new AreaHideSubcommand());
 
-        this.subcommands.add(new ExpandSubcommand());
-        this.subcommands.add(new ShrinkSubcommand());
+        this.subcommands.add(new AreaExpandSubcommand());
+        this.subcommands.add(new AreaShrinkSubcommand());
         
-        this.subcommands.add(new InfoSubcommand());
+        this.subcommands.add(new AreaInfoSubcommand());
+        this.subcommands.add(new AreaEditSubcommand());
     }
 
     public ArrayList<Subcommand> getSubCommands() {
@@ -83,13 +87,25 @@ public class AreaCommand implements CommandExecutor, TabCompleter {
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
-        if(args.length == 1) {
-            return this.getSubcommandsNames();
+        
+        if(label.equalsIgnoreCase("area") && args.length == 1) {
+            return Arrays.asList("show", "hide", "info", "expand", "shrink", "create", "remove", "edit");
 
-        } else {
-            return new ArrayList<>();
-            
+        } else if(label.equalsIgnoreCase("area") && args.length == 2 && args[0].equals("edit")) {
+            return Arrays.asList("name", "color", "enterMessage", "leaveMessage", "permissions");
+
+        } else if(label.equalsIgnoreCase("area") && args.length == 3 && args[0].equals("edit") && args[1].equals("permissions")) {
+            return AreaUtil.getPermissionKeys();
+
+        } else if(label.equalsIgnoreCase("area") && args.length == 3 && args[0].equals("edit") && (args[1].equals("enterMessage") || args[1].equals("leaveMessage"))) {
+            return Arrays.asList("set", "remove");
+
+        } else if(label.equalsIgnoreCase("area") && args.length == 4 && args[0].equals("edit") && args[1].equals("permissions") && AreaUtil.getPermissionKeys().contains(args[2])) {
+            return Arrays.asList("true", "false");
+
         }
+
+        return new ArrayList<>();
     }
     
 }

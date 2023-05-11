@@ -3,10 +3,12 @@ package net.philocraft.utils;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.UUID;
 import java.awt.Color;
 
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.util.BoundingBox;
 import org.bukkit.util.Vector;
@@ -63,6 +65,8 @@ public class AreaUtil {
 
             playerAreas.add(area);
             AreaUtil.areas.put(UUID.fromString(results.getString("uuid")), playerAreas);
+
+            area.draw();
         }
     }
 
@@ -103,6 +107,16 @@ public class AreaUtil {
             }
         }
         
+        return null;
+    }
+
+    public static Area getArea(Location location) {
+        for(Area area : AreaUtil.getAreas()) {
+            if(area.contains(location)) {
+                return area;
+            }
+        }
+
         return null;
     }
 
@@ -200,6 +214,10 @@ public class AreaUtil {
 
         AreaUtil.areas.put(area.getUUID(), playerAreas);
         AreaEssentials.api.database.update("DELETE FROM Areas WHERE uuid='" + area.getUUID() + "' AND name='" + area.getName() + "';");
+    }
+
+    public static ArrayList<String> getPermissionKeys() {
+        return new ArrayList<>(Arrays.asList("mobGriefing", "doPVP"));
     }
 
 }

@@ -1,4 +1,4 @@
-package net.philocraft.commands.subcommands;
+package net.philocraft.commands.subcommands.area;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -15,7 +15,7 @@ import net.philocraft.models.Area;
 import net.philocraft.models.Subcommand;
 import net.philocraft.utils.AreaUtil;
 
-public class InfoSubcommand extends Subcommand {
+public class AreaInfoSubcommand extends Subcommand {
 
     @Override
     public String getName() {

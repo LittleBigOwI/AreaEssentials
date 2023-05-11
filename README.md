@@ -20,7 +20,6 @@ A BlueMap compatible claim plugin.
 - `/area edit name [name]`
 - `/area edit joinMessage [message]`
 - `/area edit leaveMessage [message]`
-- `/area edit colorgroupName [groupName]`
 - `/area edit permissions mobGriefing [true/false]`
 - `/area edit permissions doPVP [true/false]`
 - `/setwarp`

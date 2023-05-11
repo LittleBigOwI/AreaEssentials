@@ -13,9 +13,22 @@ import org.bukkit.entity.Player;
 import dev.littlebigowl.api.constants.Colors;
 import dev.littlebigowl.api.errors.InvalidArgumentsException;
 import dev.littlebigowl.api.errors.InvalidSenderException;
+import net.philocraft.commands.subcommands.claim.ClaimBlocksSubcommand;
+import net.philocraft.commands.subcommands.claim.ClaimOffSubcommand;
+import net.philocraft.commands.subcommands.claim.ClaimOnSubcommand;
+import net.philocraft.models.Subcommand;
 import net.philocraft.utils.ClaimUtil;
 
 public class ClaimCommand implements CommandExecutor, TabCompleter {
+
+    private ArrayList<Subcommand> subcommands = new ArrayList<>();
+
+    public ClaimCommand() {
+        this.subcommands.add(new ClaimOnSubcommand());
+        this.subcommands.add(new ClaimOffSubcommand());
+
+        this.subcommands.add(new ClaimBlocksSubcommand());
+    }
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -37,21 +50,22 @@ public class ClaimCommand implements CommandExecutor, TabCompleter {
         if(args.length == 0) {
             ClaimUtil.toggleClaimMode(player);
             player.sendMessage(Colors.SUCCESS.getChatColor() + "Toggled claim mode " + ClaimUtil.getFormatedClaimMode(player) + ".");
+            return true;
+        }
 
-        } else if(args[0].equals("on")) {
-            ClaimUtil.setClaimModeOn(player);
-            player.sendMessage(Colors.SUCCESS.getChatColor() + "Claim mode activated.");
-        
-        } else if(args[0].equals("off")){
-            ClaimUtil.setClaimModeOff(player);
-            player.sendMessage(Colors.SUCCESS.getChatColor() + "Claim mode deactivated.");
+        boolean performedCommand = false;
 
-        } else {
-            player.sendMessage(
-                Colors.INFO.getChatColor() + "You have " + 
-                Colors.MAJOR.getChatColor() + ClaimUtil.getClaimBlocks(player) + 
-                Colors.INFO.getChatColor() + " claim blocks."
-            );
+        if(args.length > 0) {
+            for(int i = 0; i < this.subcommands.size(); i++) {
+                if(args[0].equalsIgnoreCase(this.subcommands.get(i).getName())) {
+                    this.subcommands.get(i).perform(player, args);
+                    performedCommand = true;
+                }
+            }
+        }
+
+        if(!performedCommand) {
+            return new InvalidArgumentsException().sendCause(sender);
         }
 
         return true;

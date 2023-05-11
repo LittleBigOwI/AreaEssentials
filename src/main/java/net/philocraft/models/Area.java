@@ -17,6 +17,10 @@ import org.bukkit.util.Vector;
 
 import com.flowpowered.math.vector.Vector2d;
 
+import de.bluecolored.bluemap.api.BlueMapMap;
+import de.bluecolored.bluemap.api.markers.ExtrudeMarker;
+import de.bluecolored.bluemap.api.markers.MarkerSet;
+import de.bluecolored.bluemap.api.math.Shape;
 import net.philocraft.AreaEssentials;
 import net.philocraft.utils.AreaUtil;
 
@@ -150,6 +154,15 @@ public class Area {
         return null;
     }
 
+    private Vector2d[] getAnchorPoints() {
+        Vector2d p1 = new Vector2d(this.box.getMinX(), this.box.getMinZ());
+        Vector2d p2 = new Vector2d(this.box.getMaxX(), this.box.getMinZ());
+        Vector2d p3 = new Vector2d(this.box.getMaxX(), this.box.getMaxZ());
+        Vector2d p4 = new Vector2d(this.box.getMinX(), this.box.getMaxZ());
+
+        return new Vector2d[]{p1, p2, p3, p4};
+    }
+
     public String getName() {
         return this.name;
     }
@@ -196,6 +209,10 @@ public class Area {
 
     public boolean contains(Player p) {
         return this.box.contains(p.getLocation().toVector());
+    }
+
+    public boolean contains(Location l) {
+        return this.box.contains(l.toVector());
     }
 
     public Vector[] getPoints() {
@@ -300,6 +317,49 @@ public class Area {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void draw() {
+        int[] borderColor = new int[]{this.color.getRed(), this.color.getGreen(), this.color.getBlue()};
+        int[] fillcolor = new int[3];
+        for(int k = 0; k < borderColor.length; k++) {
+            if(borderColor[k] > 55) {
+                fillcolor[k] = borderColor[k] - 55;
+            } else {
+                fillcolor[k] = 0;
+            }
+        }
+
+        ExtrudeMarker marker = ExtrudeMarker.builder()
+            .label(this.getName())
+            .shape(new Shape(this.getAnchorPoints()), -64, 320)
+            .lineColor(new de.bluecolored.bluemap.api.math.Color(borderColor[0], borderColor[1], borderColor[2], 1.0f))
+            .fillColor(new de.bluecolored.bluemap.api.math.Color(fillcolor[0], fillcolor[1], fillcolor[2], 0.3f))
+            .minDistance(0.0)
+            .build();
+                
+        AreaEssentials.blueMap.getWorld("world").ifPresent(world -> {
+            for(BlueMapMap map : world.getMaps()) {
+                
+                if(map.getMarkerSets().get("Areas") != null) {
+                    map.getMarkerSets().get("Areas").put(this.getName(), marker);
+
+                } else {
+                    MarkerSet markerSet = MarkerSet.builder().label("Areas").build();
+                    map.getMarkerSets().put("Areas", markerSet);
+                    map.getMarkerSets().get("Areas").put(this.getName(), marker);
+
+                }
+            }
+        });
+    }
+
+    public void erase() {
+        AreaEssentials.blueMap.getWorld("world").ifPresent(world -> {
+            for(BlueMapMap map : world.getMaps()) {         
+                map.getMarkerSets().get("Areas").remove(this.getName());
+            }
+        });
     }
 
 }

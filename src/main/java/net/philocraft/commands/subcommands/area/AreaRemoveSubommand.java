@@ -1,36 +1,38 @@
-package net.philocraft.commands.subcommands;
+package net.philocraft.commands.subcommands.area;
+
+import java.sql.SQLException;
 
 import org.bukkit.entity.Player;
 
 import dev.littlebigowl.api.constants.Colors;
 import dev.littlebigowl.api.errors.InvalidArgumentsException;
-import net.philocraft.errors.AreaTooSmallException;
+import net.philocraft.AreaEssentials;
 import net.philocraft.errors.NoAreaException;
 import net.philocraft.models.Area;
 import net.philocraft.models.Subcommand;
 import net.philocraft.utils.AreaUtil;
 import net.philocraft.utils.ClaimUtil;
 
-public class ShrinkSubcommand extends Subcommand {
-    
+public class AreaRemoveSubommand extends Subcommand {
+
     @Override
     public String getName() {
-        return "shrink";
+        return "remove";
     }
 
     @Override
     public String getDescription() {
-        return "Allows areas to be shrinked";
+        return "Removes an area";
     }
 
     @Override
     public String getSyntax() {
-        return "/area shrink <distance>";
+        return "/area remove";
     }
 
     @Override
     public boolean perform(Player player, String[] args) {
-        if(args.length != 2) {
+        if(args.length != 1) {
             return new InvalidArgumentsException().sendCause(player);
         }
 
@@ -48,26 +50,18 @@ public class ShrinkSubcommand extends Subcommand {
         }
 
         Area area = AreaUtil.getAreas().get(i);
-        int amount;
-
+        int cost = (int)area.getSurface();
+        
         try {
-            amount = Integer.parseInt(args[1]);
-        } catch (NumberFormatException e) {
-            return new InvalidArgumentsException().sendCause(player);
+            AreaUtil.removeArea(area);
+        } catch (SQLException e) {
+            AreaEssentials.getPlugin().getLogger().severe("Couldn't remove area : " + e.getMessage());
         }
 
-        if(amount < 0) {
-            return new InvalidArgumentsException("You cannot shrink an area by a negative amount.").sendCause(player);
-        }
-
-        int cost = (int)area.shrink(player, amount);
-
-        if(cost == -1) {
-            return new AreaTooSmallException().sendCause(player);
-        }
-
-        ClaimUtil.addClaimBlocks(player, amount);      
-        player.sendMessage(Colors.SUCCESS.getChatColor() + "Shrinked " + area.getName() + " by " + amount + " blocks for " + cost + " claim blocks.");
+        ClaimUtil.addClaimBlocks(player, cost);
+        player.sendMessage(Colors.SUCCESS.getChatColor() + "Successfully removed your area.");
+        
+        area.erase();
         return true;
     }
     
