@@ -4,15 +4,15 @@ import org.bukkit.command.CommandSender;
 
 import dev.littlebigowl.api.constants.Colors;
 
-public class AreaTooSmallException {
-    
+public class NotEnoughClaimsException {
+
     private String cause;
 
-    public AreaTooSmallException() {
-        this.cause = Colors.FAILURE.getChatColor() + "Area is too small!";
+    public NotEnoughClaimsException() {
+        this.cause = Colors.FAILURE.getChatColor() + "You don't have enough claim blocks.";
     }
 
-    public AreaTooSmallException(String cause) {
+    public NotEnoughClaimsException(String cause) {
         this.cause = Colors.FAILURE.getChatColor() + cause;
     }
 
@@ -22,4 +22,3 @@ public class AreaTooSmallException {
     }
 
 }
-

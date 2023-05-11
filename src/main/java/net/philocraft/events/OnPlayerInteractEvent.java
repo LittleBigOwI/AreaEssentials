@@ -97,7 +97,7 @@ public class OnPlayerInteractEvent implements Listener {
                 AreaUtil.addPotentialArea(player, OnPlayerInteractEvent.setupArea(player));
             
             } else if(corners.get(player).size() == 2 && OnPlayerInteractEvent.setupArea(player) == null) {
-                player.sendMessage(Colors.FAILURE.getChatColor() + "Area is to small! It needs to be at least 16x16.");
+                new AreaExistsException().sendCause(player);
 
             }
 
@@ -110,7 +110,7 @@ public class OnPlayerInteractEvent implements Listener {
                 AreaUtil.addPotentialArea(player, OnPlayerInteractEvent.setupArea(player));
             
             } else if(corners.get(player).size() == 2 && OnPlayerInteractEvent.setupArea(player) == null) {
-                player.sendMessage(Colors.FAILURE.getChatColor() + "Area is to small! It needs to be at least 16x16.");
+                new AreaExistsException().sendCause(player);
 
             }
         }

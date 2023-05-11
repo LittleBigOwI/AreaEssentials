@@ -7,10 +7,13 @@ import org.bukkit.entity.Player;
 import dev.littlebigowl.api.constants.Colors;
 import dev.littlebigowl.api.errors.InvalidArgumentsException;
 import net.philocraft.AreaEssentials;
+import net.philocraft.errors.AreaExistsException;
 import net.philocraft.errors.NoAreaException;
+import net.philocraft.errors.NotEnoughClaimsException;
 import net.philocraft.models.Area;
 import net.philocraft.models.Subcommand;
 import net.philocraft.utils.AreaUtil;
+import net.philocraft.utils.ClaimUtil;
 
 public class CreateSubcommand extends Subcommand {
 
@@ -31,7 +34,7 @@ public class CreateSubcommand extends Subcommand {
 
     @Override
     public boolean perform(Player player, String[] args) {
-        if(args.length != 1) {
+        if(args.length != 1 && args.length != 2) {
             return new InvalidArgumentsException().sendCause(player);
         }
 
@@ -41,12 +44,25 @@ public class CreateSubcommand extends Subcommand {
             return new NoAreaException("Could not find corners for area.").sendCause(player);
         }
 
+        if(potentialArea.getSurface() > ClaimUtil.getClaimBlocks(player)) {
+            return new NotEnoughClaimsException().sendCause(player);
+        }
+
+        if(args.length == 2 && args[1] != null && AreaUtil.getArea(player, args[1]) != null) {
+            return new AreaExistsException("You already have an area with that name.").sendCause(player);
+        }
+
+        if(args.length == 2 && args[1] != null) {
+            potentialArea.setName(args[1]);
+        }
+
         try {
             AreaUtil.createArea(potentialArea);
+            ClaimUtil.addClaimBlocks(player, (int)potentialArea.getSurface()*-1);
         } catch (SQLException e) {
             AreaEssentials.getPlugin().getLogger().severe("Couldn't save area : " + e.getMessage());
         }
-        player.sendMessage(Colors.SUCCESS.getChatColor() + "Successfully created your area.");
+        player.sendMessage(Colors.SUCCESS.getChatColor() + "Successfully created new area for " + potentialArea.getSurface() + " claim blocks.");
         
         return true;
     }

@@ -5,9 +5,11 @@ import org.bukkit.entity.Player;
 import dev.littlebigowl.api.constants.Colors;
 import dev.littlebigowl.api.errors.InvalidArgumentsException;
 import net.philocraft.errors.NoAreaException;
+import net.philocraft.errors.NotEnoughClaimsException;
 import net.philocraft.models.Area;
 import net.philocraft.models.Subcommand;
 import net.philocraft.utils.AreaUtil;
+import net.philocraft.utils.ClaimUtil;
 
 public class ExpandSubcommand extends Subcommand {
 
@@ -58,7 +60,13 @@ public class ExpandSubcommand extends Subcommand {
             return new InvalidArgumentsException("You cannot expand an area by a negative amount.").sendCause(player);
         }
 
-        double cost = area.expand(player, amount);        
+        int cost = (int)area.expand(player, amount);
+        
+        if(cost > ClaimUtil.getClaimBlocks(player)) {
+            return new NotEnoughClaimsException().sendCause(player);
+        }
+
+        ClaimUtil.addClaimBlocks(player, amount*-1);
         player.sendMessage(Colors.SUCCESS.getChatColor() + "Expanded " + area.getName() + " by " + amount + " blocks for " + cost + " claim blocks.");
         return true;
     }

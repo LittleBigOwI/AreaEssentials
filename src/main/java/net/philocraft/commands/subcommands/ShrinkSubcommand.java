@@ -4,10 +4,12 @@ import org.bukkit.entity.Player;
 
 import dev.littlebigowl.api.constants.Colors;
 import dev.littlebigowl.api.errors.InvalidArgumentsException;
+import net.philocraft.errors.AreaTooSmallException;
 import net.philocraft.errors.NoAreaException;
 import net.philocraft.models.Area;
 import net.philocraft.models.Subcommand;
 import net.philocraft.utils.AreaUtil;
+import net.philocraft.utils.ClaimUtil;
 
 public class ShrinkSubcommand extends Subcommand {
     
@@ -58,7 +60,13 @@ public class ShrinkSubcommand extends Subcommand {
             return new InvalidArgumentsException("You cannot shrink an area by a negative amount.").sendCause(player);
         }
 
-        double cost = area.shrink(player, amount);        
+        int cost = (int)area.shrink(player, amount);
+
+        if(cost == -1) {
+            return new AreaTooSmallException().sendCause(player);
+        }
+
+        ClaimUtil.addClaimBlocks(player, amount);      
         player.sendMessage(Colors.SUCCESS.getChatColor() + "Shrinked " + area.getName() + " by " + amount + " blocks for " + cost + " claim blocks.");
         return true;
     }

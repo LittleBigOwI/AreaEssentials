@@ -117,6 +117,20 @@ public class Area {
         }
     }
 
+    private double getSurface(BoundingBox box) {
+        return box.getWidthX() * box.getWidthZ();
+    }
+
+    private boolean isValid(BoundingBox box) {
+        boolean surface = (this.getSurface(box) >= AreaEssentials.api.areas.getMinAreaSurface());
+        boolean sides = (
+            box.getWidthX() >= AreaEssentials.api.areas.getMinAreaWidthX() && 
+            box.getWidthZ() >= AreaEssentials.api.areas.getMinAreaWidthY()
+        );
+
+        return (surface && sides);
+    }
+
     private CardinalDirection getDirection(Player p) {
         double y = p.getLocation().getYaw();
 
@@ -169,7 +183,7 @@ public class Area {
     }
 
     public double getSurface() {
-        return this.box.getWidthX() * this.box.getWidthZ();
+        return this.getSurface(this.box);
     }
 
     public boolean contains(Vector v) {
@@ -192,13 +206,7 @@ public class Area {
     }
 
     public boolean isValid() {
-        boolean surface = (this.getSurface() > AreaEssentials.api.areas.getMinAreaSurface());
-        boolean sides = (
-            this.box.getWidthX() > AreaEssentials.api.areas.getMinAreaWidthX() && 
-            this.box.getWidthZ() > AreaEssentials.api.areas.getMinAreaWidthY()
-        );
-
-        return (surface && sides);
+        return this.isValid(this.box);
     }
 
     public void show(Player player) {
@@ -264,6 +272,10 @@ public class Area {
         double currentSurface = this.getSurface();
         double newSurface = newBox.getWidthX() * newBox.getWidthZ();
 
+        if(!this.isValid(newBox)) {
+            return -1;
+        }
+
         double cost = newSurface - currentSurface;
         this.box.expand(direction.asVector(), amount);
         
@@ -278,7 +290,16 @@ public class Area {
     }
 
     public double shrink(Player player, int amount) {
-        return this.expand(player, amount*-1)*-1;
+        double cost = this.expand(player, amount*-1);
+
+        if(cost == -1) {
+            return cost;
+        }
+        return cost*-1;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
 }
