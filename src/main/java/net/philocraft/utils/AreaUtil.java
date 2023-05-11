@@ -14,40 +14,10 @@ import org.bukkit.util.Vector;
 import net.philocraft.AreaEssentials;
 import net.philocraft.models.Area;
 
-public class DatabaseUtil {
+public class AreaUtil {
     
-    private static final HashMap<Player, Boolean> claims = new HashMap<>();
     private static final HashMap<UUID, Area> potentialAreas = new HashMap<>();
     private static final HashMap<UUID, ArrayList<Area>> areas = new HashMap<>();
-
-    public static void setClaimModeOn(Player player) {
-        claims.put(player, true);
-    }
-
-    public static void setClaimModeOff(Player player) {
-        claims.put(player, false);
-    }
-
-    public static void toggleClaimMode(Player player) {
-        
-        if(claims.containsKey(player)) {
-            claims.put(player, !claims.get(player));
-        } else {
-            DatabaseUtil.setClaimModeOn(player);
-        }
-    }
-
-    public static boolean getClaimMode(Player player) {
-        return (claims.containsKey(player) && claims.get(player));
-    }
-
-    public static String getFormatedClaimMode(Player player) {
-        
-        if(DatabaseUtil.getClaimMode(player)) {
-            return "on";
-        }
-        return "off";
-    }
 
     public static void loadAreas() throws SQLException {
         AreaEssentials.api.database.create(
@@ -86,21 +56,21 @@ public class DatabaseUtil {
                 results.getBoolean("doPVP")
             );
 
-            ArrayList<Area> playerAreas = DatabaseUtil.areas.get(UUID.fromString(results.getString("uuid")));
+            ArrayList<Area> playerAreas = AreaUtil.areas.get(UUID.fromString(results.getString("uuid")));
             if(playerAreas == null) {
                 playerAreas = new ArrayList<>();
             }
 
             playerAreas.add(area);
-            DatabaseUtil.areas.put(UUID.fromString(results.getString("uuid")), playerAreas);
+            AreaUtil.areas.put(UUID.fromString(results.getString("uuid")), playerAreas);
         }
     }
 
     public static ArrayList<Area> getAreas() {
         ArrayList<Area> allAreas = new ArrayList<>();
 
-        for(UUID uuid : DatabaseUtil.areas.keySet()) {
-            for(Area playerArea : DatabaseUtil.areas.get(uuid)) {
+        for(UUID uuid : AreaUtil.areas.keySet()) {
+            for(Area playerArea : AreaUtil.areas.get(uuid)) {
                 allAreas.add(playerArea);
             }
         }
@@ -109,10 +79,10 @@ public class DatabaseUtil {
     }
 
     public static ArrayList<Area> getAreas(Player player) {
-        ArrayList<Area> playerAreas = DatabaseUtil.areas.get(player.getUniqueId());
+        ArrayList<Area> playerAreas = AreaUtil.areas.get(player.getUniqueId());
 
         if(playerAreas == null) {
-            DatabaseUtil.areas.put(player.getUniqueId(), new ArrayList<>());
+            AreaUtil.areas.put(player.getUniqueId(), new ArrayList<>());
             playerAreas = new ArrayList<>();
         }
 
@@ -120,10 +90,10 @@ public class DatabaseUtil {
     }
 
     public static Area getArea(Player player, String name) {
-        ArrayList<Area> playerAreas = DatabaseUtil.areas.get(player.getUniqueId());
+        ArrayList<Area> playerAreas = AreaUtil.areas.get(player.getUniqueId());
 
         if(playerAreas == null) {
-            DatabaseUtil.areas.put(player.getUniqueId(), new ArrayList<>());
+            AreaUtil.areas.put(player.getUniqueId(), new ArrayList<>());
             return null;
         }
 
@@ -137,31 +107,31 @@ public class DatabaseUtil {
     }
 
     public static void addPotentialArea(UUID uuid, Area area) {
-        DatabaseUtil.potentialAreas.put(uuid, area);
+        AreaUtil.potentialAreas.put(uuid, area);
     }
 
     public static void addPotentialArea(Player player, Area area) {
-        DatabaseUtil.potentialAreas.put(player.getUniqueId(), area);
+        AreaUtil.potentialAreas.put(player.getUniqueId(), area);
     }
 
     public static Area getPotentialArea(UUID uuid) {
-        return DatabaseUtil.potentialAreas.get(uuid);
+        return AreaUtil.potentialAreas.get(uuid);
     }
 
     public static Area getPotentialArea(Player player) {
-        return DatabaseUtil.potentialAreas.get(player.getUniqueId());
+        return AreaUtil.potentialAreas.get(player.getUniqueId());
     }
 
     public static void createArea(Area area) throws SQLException{
-        DatabaseUtil.potentialAreas.put(area.getUUID(), null);
+        AreaUtil.potentialAreas.put(area.getUUID(), null);
         
-        ArrayList<Area> playerAreas = DatabaseUtil.areas.get(area.getUUID());
+        ArrayList<Area> playerAreas = AreaUtil.areas.get(area.getUUID());
         if(playerAreas == null) {
             playerAreas = new ArrayList<>();
         }
 
         playerAreas.add(area);
-        DatabaseUtil.areas.put(area.getUUID(), playerAreas);
+        AreaUtil.areas.put(area.getUUID(), playerAreas);
 
         Color areaColor = area.getColor();
 

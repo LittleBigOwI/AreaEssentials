@@ -6,7 +6,7 @@ import dev.littlebigowl.api.errors.InvalidArgumentsException;
 import net.philocraft.errors.NoAreaException;
 import net.philocraft.models.Area;
 import net.philocraft.models.Subcommand;
-import net.philocraft.utils.DatabaseUtil;
+import net.philocraft.utils.AreaUtil;
 
 public class ShowSubcommand extends Subcommand {
 
@@ -32,15 +32,15 @@ public class ShowSubcommand extends Subcommand {
         }
 
         int i = 0;
-        while(i < DatabaseUtil.getAreas().size() && !DatabaseUtil.getAreas().get(i).contains(player)) {
+        while(i < AreaUtil.getAreas().size() && !AreaUtil.getAreas().get(i).contains(player)) {
             i++;
         }
 
-        if(i == DatabaseUtil.getAreas().size()) {
+        if(i == AreaUtil.getAreas().size()) {
             return new NoAreaException().sendCause(player);
         }
 
-        Area area = DatabaseUtil.getAreas().get(i);
+        Area area = AreaUtil.getAreas().get(i);
 
         area.show(player);
         return true;

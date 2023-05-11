@@ -11,7 +11,7 @@ import net.philocraft.commands.AreaCommandManager;
 import net.philocraft.commands.ClaimCommand;
 import net.philocraft.events.OnPlayerInteractEvent;
 import net.philocraft.utils.ClaimUtil;
-import net.philocraft.utils.DatabaseUtil;
+import net.philocraft.utils.AreaUtil;
 
 public class AreaEssentials extends JavaPlugin {
 
@@ -31,14 +31,22 @@ public class AreaEssentials extends JavaPlugin {
             this.getLogger().info("Loaded BlueMapAPI.");
 
             try {
-                DatabaseUtil.loadAreas();
-                this.getLogger().info("Loaded " + DatabaseUtil.getAreas().size() + " areas.");
+                AreaUtil.loadAreas();
+                this.getLogger().info("Loaded " + AreaUtil.getAreas().size() + " areas.");
             } catch (SQLException e) {
                 this.getLogger().severe("Couldn't load areas : " + e.getMessage());
             }
         });
 
         plugin = this;
+
+        try {
+            ClaimUtil.loadClaims();
+            this.getLogger().info("Loaded claims.");
+        } catch (SQLException e) {
+            this.getLogger().severe("Couldn't load claims : " + e.getMessage());
+        }
+
         ClaimUtil.checkPlaytimeBlocks();
 
         //!REGISTER EVENTS

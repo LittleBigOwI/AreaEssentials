@@ -13,7 +13,7 @@ import net.md_5.bungee.api.ChatColor;
 import net.philocraft.errors.NoAreaException;
 import net.philocraft.models.Area;
 import net.philocraft.models.Subcommand;
-import net.philocraft.utils.DatabaseUtil;
+import net.philocraft.utils.AreaUtil;
 
 public class InfoSubcommand extends Subcommand {
 
@@ -39,15 +39,15 @@ public class InfoSubcommand extends Subcommand {
         }
 
         int i = 0;
-        while(i < DatabaseUtil.getAreas().size() && !DatabaseUtil.getAreas().get(i).contains(player)) {
+        while(i < AreaUtil.getAreas().size() && !AreaUtil.getAreas().get(i).contains(player)) {
             i++;
         }
 
-        if(i == DatabaseUtil.getAreas().size()) {
+        if(i == AreaUtil.getAreas().size()) {
             return new NoAreaException().sendCause(player);
         }
 
-        Area area = DatabaseUtil.getAreas().get(i);
+        Area area = AreaUtil.getAreas().get(i);
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss z");
         dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+2"));

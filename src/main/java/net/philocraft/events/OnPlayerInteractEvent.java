@@ -18,7 +18,8 @@ import net.philocraft.AreaEssentials;
 import net.philocraft.components.AreaCreateComponent;
 import net.philocraft.errors.AreaExistsException;
 import net.philocraft.models.Area;
-import net.philocraft.utils.DatabaseUtil;
+import net.philocraft.utils.AreaUtil;
+import net.philocraft.utils.ClaimUtil;
 
 public class OnPlayerInteractEvent implements Listener {
 
@@ -52,7 +53,7 @@ public class OnPlayerInteractEvent implements Listener {
         boundingBox.expand(new Vector(0, -64, 0));
 
         Area area = new Area(
-            player.getName() + "-" + DatabaseUtil.getAreas(player).size(), 
+            player.getName() + "-" + AreaUtil.getAreas(player).size(), 
             AreaEssentials.api.scoreboard.getEssentialsTeam(player).getColor(), 
             player.getUniqueId(), 
             boundingBox
@@ -71,18 +72,18 @@ public class OnPlayerInteractEvent implements Listener {
         Player player = event.getPlayer();
         Block block = event.getClickedBlock();
 
-        if(!DatabaseUtil.getClaimMode(player) || block == null) {
+        if(!ClaimUtil.getClaimMode(player) || block == null) {
             return;
         }
 
         block = block.getRelative(event.getBlockFace());
 
         int i = 0;
-        while(i < DatabaseUtil.getAreas().size() && !DatabaseUtil.getAreas().get(i).contains(block)) {
+        while(i < AreaUtil.getAreas().size() && !AreaUtil.getAreas().get(i).contains(block)) {
             i++;
         }
 
-        if(i != DatabaseUtil.getAreas().size() && event.getHand().equals(EquipmentSlot.HAND)) {
+        if(i != AreaUtil.getAreas().size() && event.getHand().equals(EquipmentSlot.HAND)) {
             new AreaExistsException().sendCause(player);
             return;
         }
@@ -93,7 +94,7 @@ public class OnPlayerInteractEvent implements Listener {
 
             if(corners.get(player).size() == 2 && OnPlayerInteractEvent.setupArea(player) != null) {
                 new AreaCreateComponent(player, "Area selected! Click this message to create it!").send();
-                DatabaseUtil.addPotentialArea(player, OnPlayerInteractEvent.setupArea(player));
+                AreaUtil.addPotentialArea(player, OnPlayerInteractEvent.setupArea(player));
             
             } else if(corners.get(player).size() == 2 && OnPlayerInteractEvent.setupArea(player) == null) {
                 player.sendMessage(Colors.FAILURE.getChatColor() + "Area is to small! It needs to be at least 16x16.");
@@ -106,7 +107,7 @@ public class OnPlayerInteractEvent implements Listener {
 
             if(corners.get(player).size() == 2 && OnPlayerInteractEvent.setupArea(player) != null) {
                 new AreaCreateComponent(player, "Area selected! Click this message to create it!").send();
-                DatabaseUtil.addPotentialArea(player, OnPlayerInteractEvent.setupArea(player));
+                AreaUtil.addPotentialArea(player, OnPlayerInteractEvent.setupArea(player));
             
             } else if(corners.get(player).size() == 2 && OnPlayerInteractEvent.setupArea(player) == null) {
                 player.sendMessage(Colors.FAILURE.getChatColor() + "Area is to small! It needs to be at least 16x16.");

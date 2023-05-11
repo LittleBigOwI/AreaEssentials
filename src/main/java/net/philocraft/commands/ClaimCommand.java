@@ -13,7 +13,7 @@ import org.bukkit.entity.Player;
 import dev.littlebigowl.api.constants.Colors;
 import dev.littlebigowl.api.errors.InvalidArgumentsException;
 import dev.littlebigowl.api.errors.InvalidSenderException;
-import net.philocraft.utils.DatabaseUtil;
+import net.philocraft.utils.ClaimUtil;
 
 public class ClaimCommand implements CommandExecutor, TabCompleter {
 
@@ -28,24 +28,30 @@ public class ClaimCommand implements CommandExecutor, TabCompleter {
             return new InvalidArgumentsException().sendCause(sender);
         }
 
-        if(args.length == 1 && !args[0].equals("on") && !args[0].equals("off")) {
+        if(args.length == 1 && !args[0].equals("on") && !args[0].equals("off") && !args[0].equals("blocks")) {
             return new InvalidArgumentsException("You can only turn claim mode on or off.").sendCause(sender);
         }
 
         Player player = (Player)sender;
         
         if(args.length == 0) {
-            DatabaseUtil.toggleClaimMode(player);
-            player.sendMessage(Colors.SUCCESS.getChatColor() + "Toggled claim mode " + DatabaseUtil.getFormatedClaimMode(player) + ".");
+            ClaimUtil.toggleClaimMode(player);
+            player.sendMessage(Colors.SUCCESS.getChatColor() + "Toggled claim mode " + ClaimUtil.getFormatedClaimMode(player) + ".");
 
         } else if(args[0].equals("on")) {
-            DatabaseUtil.setClaimModeOn(player);
+            ClaimUtil.setClaimModeOn(player);
             player.sendMessage(Colors.SUCCESS.getChatColor() + "Claim mode activated.");
         
-        } else {
-            DatabaseUtil.setClaimModeOff(player);
+        } else if(args[0].equals("off")){
+            ClaimUtil.setClaimModeOff(player);
             player.sendMessage(Colors.SUCCESS.getChatColor() + "Claim mode deactivated.");
 
+        } else {
+            player.sendMessage(
+                Colors.INFO.getChatColor() + "You have " + 
+                Colors.MAJOR.getChatColor() + ClaimUtil.getClaimBlocks(player) + 
+                Colors.INFO.getChatColor() + " claim blocks."
+            );
         }
 
         return true;
@@ -54,7 +60,7 @@ public class ClaimCommand implements CommandExecutor, TabCompleter {
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
         if(args.length == 1) {
-            return new ArrayList<>(Arrays.asList("on", "off"));
+            return new ArrayList<>(Arrays.asList("on", "off", "blocks"));
         }
         return new ArrayList<>();
     }

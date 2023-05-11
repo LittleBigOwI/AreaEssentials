@@ -18,7 +18,7 @@ import org.bukkit.util.Vector;
 import com.flowpowered.math.vector.Vector2d;
 
 import net.philocraft.AreaEssentials;
-import net.philocraft.utils.DatabaseUtil;
+import net.philocraft.utils.AreaUtil;
 
 public class Area {
     
@@ -270,7 +270,7 @@ public class Area {
         this.show(player);
 
         try {
-            DatabaseUtil.saveArea(this);
+            AreaUtil.saveArea(this);
         } catch (SQLException e) {
             AreaEssentials.getPlugin().getLogger().severe("Couldn't save area : " + e.getMessage());
         }

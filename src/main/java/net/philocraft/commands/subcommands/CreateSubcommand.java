@@ -10,7 +10,7 @@ import net.philocraft.AreaEssentials;
 import net.philocraft.errors.NoAreaException;
 import net.philocraft.models.Area;
 import net.philocraft.models.Subcommand;
-import net.philocraft.utils.DatabaseUtil;
+import net.philocraft.utils.AreaUtil;
 
 public class CreateSubcommand extends Subcommand {
 
@@ -35,14 +35,14 @@ public class CreateSubcommand extends Subcommand {
             return new InvalidArgumentsException().sendCause(player);
         }
 
-        Area potentialArea = DatabaseUtil.getPotentialArea(player);
+        Area potentialArea = AreaUtil.getPotentialArea(player);
         
         if(potentialArea == null) {
             return new NoAreaException("Could not find corners for area.").sendCause(player);
         }
 
         try {
-            DatabaseUtil.createArea(potentialArea);
+            AreaUtil.createArea(potentialArea);
         } catch (SQLException e) {
             AreaEssentials.getPlugin().getLogger().severe("Couldn't save area : " + e.getMessage());
         }
