@@ -319,6 +319,18 @@ public class Area {
         this.name = name;
     }
 
+    public void setColor(Color color) {
+        this.color = color;
+    }
+
+    public void setEnterMessage(String message) {
+        this.enterMessage = message;
+    }
+
+    public void setLeaveMessage(String message) {
+        this.leaveMessage = message;
+    }
+
     public void draw() {
         int[] borderColor = new int[]{this.color.getRed(), this.color.getGreen(), this.color.getBlue()};
         int[] fillcolor = new int[3];

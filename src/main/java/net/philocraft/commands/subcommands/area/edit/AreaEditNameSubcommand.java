@@ -1,8 +1,16 @@
 package net.philocraft.commands.subcommands.area.edit;
 
+import java.sql.SQLException;
+
 import org.bukkit.entity.Player;
 
+import dev.littlebigowl.api.constants.Colors;
+import dev.littlebigowl.api.errors.InvalidArgumentsException;
+import net.philocraft.AreaEssentials;
+import net.philocraft.commands.subcommands.area.AreaEditSubcommand;
+import net.philocraft.models.Area;
 import net.philocraft.models.Subcommand;
+import net.philocraft.utils.AreaUtil;
 
 public class AreaEditNameSubcommand extends Subcommand {
 
@@ -23,7 +31,27 @@ public class AreaEditNameSubcommand extends Subcommand {
 
     @Override
     public boolean perform(Player player, String[] args) {
-        player.sendMessage("name");
+        if(args.length != 3) {
+            return new InvalidArgumentsException().sendCause(player);
+        }
+
+        String name = args[2];
+        Area area = AreaEditSubcommand.getArea();
+
+        if(name != null && name.contains("'") || name.contains("\\") || name.contains("\"")) {
+            return new InvalidArgumentsException("Area names can't contain \\, ' or \" characters.").sendCause(player);
+        }
+
+        area.erase();
+        area.setName(name);
+        area.draw();
+        
+        try {
+            AreaUtil.saveArea(area);
+        } catch (SQLException e) {
+            AreaEssentials.getPlugin().getLogger().severe("Couldn't save area : " + e.getMessage());
+        }
+        player.sendMessage(Colors.SUCCESS.getChatColor() + "Successfully renamed your area.");
         return true;
     }
     

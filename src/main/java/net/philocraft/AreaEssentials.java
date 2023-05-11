@@ -13,6 +13,7 @@ import net.philocraft.events.OnEntityChangeBlockEvent;
 import net.philocraft.events.OnEntityDamageEvent;
 import net.philocraft.events.OnEntityExplodeEvent;
 import net.philocraft.events.OnPlayerInteractEvent;
+import net.philocraft.events.OnPlayerMoveEvent;
 import net.philocraft.utils.ClaimUtil;
 import net.philocraft.utils.AreaUtil;
 
@@ -57,6 +58,7 @@ public class AreaEssentials extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new OnEntityDamageEvent(), this);
         this.getServer().getPluginManager().registerEvents(new OnEntityExplodeEvent(), this);
         this.getServer().getPluginManager().registerEvents(new OnPlayerInteractEvent(), this);
+        this.getServer().getPluginManager().registerEvents(new OnPlayerMoveEvent(), this);
 
         //!REGISTER COMMANDS
         this.getCommand("claim").setExecutor(new ClaimCommand());

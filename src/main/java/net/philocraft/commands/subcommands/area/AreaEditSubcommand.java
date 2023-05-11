@@ -46,9 +46,6 @@ public class AreaEditSubcommand extends Subcommand {
 
     @Override
     public boolean perform(Player player, String[] args) {
-        if(args.length > 4) {
-            return new InvalidArgumentsException().sendCause(player);
-        }
 
         int i = 0;
         while(i < AreaUtil.getAreas().size() && !AreaUtil.getAreas().get(i).contains(player)) {
