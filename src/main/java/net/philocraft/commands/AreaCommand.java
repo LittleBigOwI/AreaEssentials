@@ -9,7 +9,10 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
+import dev.littlebigowl.api.constants.Worlds;
+import dev.littlebigowl.api.errors.InvalidArgumentsException;
 import dev.littlebigowl.api.errors.InvalidSenderException;
+import dev.littlebigowl.api.errors.InvalidWorldException;
 import net.philocraft.commands.subcommands.CreateSubcommand;
 import net.philocraft.commands.subcommands.ExpandSubcommand;
 import net.philocraft.commands.subcommands.HideSubcommand;
@@ -19,11 +22,11 @@ import net.philocraft.commands.subcommands.ShowSubcommand;
 import net.philocraft.commands.subcommands.ShrinkSubcommand;
 import net.philocraft.models.Subcommand;
 
-public class AreaCommandManager implements CommandExecutor, TabCompleter {
+public class AreaCommand implements CommandExecutor, TabCompleter {
 
     private ArrayList<Subcommand> subcommands = new ArrayList<>();
 
-    public AreaCommandManager() {
+    public AreaCommand() {
         this.subcommands.add(new CreateSubcommand());
         this.subcommands.add(new RemoveSubommand());
 
@@ -56,12 +59,23 @@ public class AreaCommandManager implements CommandExecutor, TabCompleter {
 
         Player player = (Player)sender;
 
+        if(!player.getWorld().equals(Worlds.OVERWORLD.getWorld())) {
+            return new InvalidWorldException().sendCause(player);   
+        }
+
+        boolean performedCommand = false;
+
         if(args.length > 0) {
             for(int i = 0; i < this.subcommands.size(); i++) {
                 if(args[0].equalsIgnoreCase(this.subcommands.get(i).getName())) {
                     this.subcommands.get(i).perform(player, args);
+                    performedCommand = true;
                 }
             }
+        }
+
+        if(!performedCommand) {
+            return new InvalidArgumentsException().sendCause(sender);
         }
 
         return true;

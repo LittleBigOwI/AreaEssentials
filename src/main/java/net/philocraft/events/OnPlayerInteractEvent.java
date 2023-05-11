@@ -15,6 +15,8 @@ import org.bukkit.util.BoundingBox;
 import org.bukkit.util.Vector;
 
 import dev.littlebigowl.api.constants.Colors;
+import dev.littlebigowl.api.constants.Worlds;
+import dev.littlebigowl.api.errors.InvalidWorldException;
 import net.philocraft.AreaEssentials;
 import net.philocraft.components.AreaCreateComponent;
 import net.philocraft.errors.AreaExistsException;
@@ -88,6 +90,11 @@ public class OnPlayerInteractEvent implements Listener {
 
         if(i != AreaUtil.getAreas().size() && event.getHand().equals(EquipmentSlot.HAND)) {
             new AreaExistsException().sendCause(player);
+            return;
+        }
+
+        if(!player.getWorld().equals(Worlds.OVERWORLD.getWorld())) {
+            new InvalidWorldException().sendCause(player);
             return;
         }
 

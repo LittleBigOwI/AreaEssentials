@@ -7,7 +7,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import de.bluecolored.bluemap.api.BlueMapAPI;
 import dev.littlebigowl.api.EssentialsAPI;
-import net.philocraft.commands.AreaCommandManager;
+import net.philocraft.commands.AreaCommand;
 import net.philocraft.commands.ClaimCommand;
 import net.philocraft.events.OnPlayerInteractEvent;
 import net.philocraft.utils.ClaimUtil;
@@ -54,7 +54,7 @@ public class AreaEssentials extends JavaPlugin {
 
         //!REGISTER COMMANDS
         this.getCommand("claim").setExecutor(new ClaimCommand());
-        this.getCommand("area").setExecutor(new AreaCommandManager());
+        this.getCommand("area").setExecutor(new AreaCommand());
 
         this.getLogger().info("Plugin enabled.");
     }
