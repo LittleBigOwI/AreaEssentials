@@ -19,11 +19,38 @@ commands:
     description: Manages areas
     permission: philocraft.areas.use
 
+  setwarp:
+    usage: /<command>
+    description: Creates a warp at the player location if the player is in one of his areas
+    permission: philocraft.warps.create
+
+  delwarp:
+    usage: /<command>
+    description: Deletes the players warp
+    permission: philocraft.warps.delete
+
+  warp:
+    usage: /<command> <warpName>
+    description: Teleports the player to a given warp
+    permission: philocraft.warps.teleport
+
 permissions:
   philocraft.claim.toggle:
-    description: allows claim command
+    description: Allows claim command
     default: true
 
   philocraft.areas.use:
-    description: allows area command
+    description: Allows area command
     default: true
+
+  philocraft.warps.create:
+    description: Allows setwarp command
+    default: true
+
+  philocraft.warps.delete:
+    description: Allows delwarp command
+    default: true
+
+  philocraft.warps.teleport:
+    description: Allows warp command
+    default: true 

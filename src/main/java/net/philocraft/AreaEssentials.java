@@ -9,12 +9,16 @@ import de.bluecolored.bluemap.api.BlueMapAPI;
 import dev.littlebigowl.api.EssentialsAPI;
 import net.philocraft.commands.AreaCommand;
 import net.philocraft.commands.ClaimCommand;
+import net.philocraft.commands.DelWarpCommand;
+import net.philocraft.commands.SetWarpCommand;
+import net.philocraft.commands.WarpCommand;
 import net.philocraft.events.OnEntityChangeBlockEvent;
 import net.philocraft.events.OnEntityDamageEvent;
 import net.philocraft.events.OnEntityExplodeEvent;
 import net.philocraft.events.OnPlayerInteractEvent;
 import net.philocraft.events.OnPlayerMoveEvent;
 import net.philocraft.utils.ClaimUtil;
+import net.philocraft.utils.WarpUtil;
 import net.philocraft.utils.AreaUtil;
 
 public class AreaEssentials extends JavaPlugin {
@@ -46,9 +50,10 @@ public class AreaEssentials extends JavaPlugin {
 
         try {
             ClaimUtil.loadClaims();
-            this.getLogger().info("Loaded claims.");
+            WarpUtil.loadWarps();
+            this.getLogger().info("Loaded claims & warps.");
         } catch (SQLException e) {
-            this.getLogger().severe("Couldn't load claims : " + e.getMessage());
+            this.getLogger().severe("Couldn't load claim/warp : " + e.getMessage());
         }
 
         ClaimUtil.checkPlaytimeBlocks();
@@ -63,6 +68,9 @@ public class AreaEssentials extends JavaPlugin {
         //!REGISTER COMMANDS
         this.getCommand("claim").setExecutor(new ClaimCommand());
         this.getCommand("area").setExecutor(new AreaCommand());
+        this.getCommand("setwarp").setExecutor(new SetWarpCommand());
+        this.getCommand("delwarp").setExecutor(new DelWarpCommand());
+        this.getCommand("warp").setExecutor(new WarpCommand());
 
         this.getLogger().info("Plugin enabled.");
     }
