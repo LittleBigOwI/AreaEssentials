@@ -62,7 +62,7 @@ public class DelWarpCommand implements CommandExecutor, TabCompleter {
                     AreaEssentials.getPlugin().getLogger().severe("Couldn't remove warp : " + e.getMessage());
                 }
 
-                player.sendMessage(Colors.SUCCESS.getChatColor() + "Successfully deleted your " + Colors.INFO.getChatColor() + warp.getName() + Colors.SUCCESS.getChatColor() + " warp.");
+                player.sendMessage(Colors.SUCCESS.getChatColor() + "Successfully deleted " + Colors.INFO.getChatColor() + warp.getName() + Colors.SUCCESS.getChatColor() + ".");
 
             } else if(args[0].equals("cancel")) {
                 player.sendMessage(Colors.SUCCESS.getChatColor() + "Successfully canceled deletion.");
@@ -74,7 +74,7 @@ public class DelWarpCommand implements CommandExecutor, TabCompleter {
         } else if(args.length == 0){
             new WarningComponent(
                 player,
-                new String[]{"You are about to delete your ", warp.getName(), " warp. Proceed? "},
+                new String[]{"You are about to delete ", warp.getName(), ". Proceed? "},
                 "/delwarp confirm",
                 "/delwarp cancel"
             ).send();
