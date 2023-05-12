@@ -62,6 +62,7 @@ public class DelWarpCommand implements CommandExecutor, TabCompleter {
                     AreaEssentials.getPlugin().getLogger().severe("Couldn't remove warp : " + e.getMessage());
                 }
 
+                warp.erase();
                 player.sendMessage(Colors.SUCCESS.getChatColor() + "Successfully deleted " + Colors.INFO.getChatColor() + warp.getName() + Colors.SUCCESS.getChatColor() + ".");
 
             } else if(args[0].equals("cancel")) {

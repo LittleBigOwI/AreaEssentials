@@ -44,6 +44,8 @@ public class AreaEssentials extends JavaPlugin {
             } catch (SQLException e) {
                 this.getLogger().severe("Couldn't load areas : " + e.getMessage());
             }
+
+            WarpUtil.drawWarps();
         });
 
         plugin = this;

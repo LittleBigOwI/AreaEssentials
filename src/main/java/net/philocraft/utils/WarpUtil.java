@@ -117,4 +117,10 @@ public class WarpUtil {
         return warpNames;
     }
 
+    public static void drawWarps() {
+        for(Warp warp : WarpUtil.warps.values()) {
+            warp.draw();
+        }
+    }
+
 }

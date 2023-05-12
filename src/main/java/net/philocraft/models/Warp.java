@@ -5,6 +5,14 @@ import java.util.UUID;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
+import com.flowpowered.math.vector.Vector2i;
+
+import de.bluecolored.bluemap.api.AssetStorage;
+import de.bluecolored.bluemap.api.BlueMapMap;
+import de.bluecolored.bluemap.api.markers.MarkerSet;
+import de.bluecolored.bluemap.api.markers.POIMarker;
+import net.philocraft.AreaEssentials;
+
 public class Warp {
     
     private UUID uuid;
@@ -57,5 +65,42 @@ public class Warp {
 
     public void setLocation(Location location) {
         this.location = location;
+    }
+
+    public void draw() {
+
+        POIMarker marker = POIMarker.builder()
+            .label(this.getName())
+            .minDistance(0.0)
+            .maxDistance(1000)
+            .position(this.getX(), this.getY(), this.getZ())
+            .build();
+
+        AreaEssentials.blueMap.getWorld("world").ifPresent(world -> {
+            for(BlueMapMap map : world.getMaps()) {
+                AssetStorage assetStorage = map.getAssetStorage();
+                String icon = assetStorage.getAssetUrl("markericons/pin.png");
+
+                marker.setIcon(icon, new Vector2i(12, 24));
+
+                if(map.getMarkerSets().get("Warps") != null) {
+                    map.getMarkerSets().get("Warps").put(this.getName(), marker);
+
+                } else {
+                    MarkerSet markerSet = MarkerSet.builder().label("Warps").build();
+                    map.getMarkerSets().put("Warps", markerSet);
+                    map.getMarkerSets().get("Warps").put(this.getName(), marker);
+
+                }
+            }
+        });
+    }
+
+    public void erase() {
+        AreaEssentials.blueMap.getWorld("world").ifPresent(world -> {
+            for(BlueMapMap map : world.getMaps()) {         
+                map.getMarkerSets().get("Warps").remove(this.getName());
+            }
+        });
     }
 }
