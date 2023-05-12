@@ -61,6 +61,12 @@ public class SetWarpCommand implements CommandExecutor, TabCompleter {
         }
 
         Warp warp = WarpUtil.getWarp(player.getUniqueId());
+
+        for(Warp w : WarpUtil.getWarps()) {
+            if(warp != null && w.getName().equals(warp.getName()) && !warp.getUUID().equals(player.getUniqueId())) {
+                return new InvalidArgumentsException("There is already a warp with that name.").sendCause(player);
+            }
+        }
         
         if(warp != null && args.length == 2) {
             if(args[1].equals("override")) {

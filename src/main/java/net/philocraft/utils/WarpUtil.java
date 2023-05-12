@@ -93,6 +93,13 @@ public class WarpUtil {
         return WarpUtil.warps.get(uuid);
     }
 
+    public static ArrayList<Warp> getWarps() {
+        ArrayList<Warp> warps = new ArrayList<>();
+        WarpUtil.warps.values().forEach(warp -> warps.add(warp));
+
+        return warps;
+    }
+
     public static Warp getWarp(String warpName) {
         for(Warp warp : WarpUtil.warps.values()) {
             if(warp.getName().equals(warpName)) {
