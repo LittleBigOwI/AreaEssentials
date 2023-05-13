@@ -175,7 +175,7 @@ public class AreaUtil {
         );
     }
 
-    public static void saveArea(Area area) throws SQLException {
+    public static void saveArea(Area area, String name) throws SQLException {
         Color areaColor = area.getColor();
 
         String enterMessage = null;
@@ -190,7 +190,7 @@ public class AreaUtil {
 
         AreaEssentials.api.database.update(
             "UPDATE Areas SET " +
-            "name='" + area.getName() + "', " + 
+            "name='" + name + "', " + 
             "color='" + String.format("#%02x%02x%02x", areaColor.getRed(), areaColor.getGreen(), areaColor.getBlue()) + "', " +
             "enterMessage=" + enterMessage + ", " +
             "leaveMessage=" + leaveMessage + ", " +
@@ -199,8 +199,13 @@ public class AreaUtil {
             "p2='" + area.getPoints()[1].getX() + "@" + area.getPoints()[1].getY() + "', " +
             "mobGriefing=" + area.getPermission("mobGriefing") + ", " +
             "doPVP=" + area.getPermission("doPVP") + " " +
-            "WHERE uuid='" + area.getUUID() + "';"
+            "WHERE uuid='" + area.getUUID() + "' " + 
+            "AND name='" + area.getName() + "';"
         );
+    }
+
+    public static void saveArea(Area area) throws SQLException {
+        AreaUtil.saveArea(area, area.getName());
     }
 
     public static void removeArea(Area area) throws SQLException {

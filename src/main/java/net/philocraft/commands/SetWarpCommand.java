@@ -17,9 +17,7 @@ import dev.littlebigowl.api.errors.InvalidArgumentsException;
 import dev.littlebigowl.api.errors.InvalidSenderException;
 import dev.littlebigowl.api.errors.InvalidWorldException;
 import net.philocraft.AreaEssentials;
-import net.philocraft.errors.NoAreaException;
 import net.philocraft.models.Warp;
-import net.philocraft.utils.AreaUtil;
 import net.philocraft.utils.WarpUtil;
 
 public class SetWarpCommand implements CommandExecutor, TabCompleter {
@@ -45,19 +43,6 @@ public class SetWarpCommand implements CommandExecutor, TabCompleter {
 
         if(name.contains("'") || name.contains("\\") || name.contains("\"")) {
             return new InvalidArgumentsException("Home names can't contain \\, ' or \" characters.").sendCause(sender);
-        }
-
-        int i = 0;
-        while(i < AreaUtil.getAreas().size() && !AreaUtil.getAreas().get(i).contains(player)) {
-            i++;
-        }
-
-        if(i == AreaUtil.getAreas().size()) {
-            return new NoAreaException().sendCause(player);
-        }
-
-        if(!AreaUtil.getAreas().get(i).getUUID().equals(player.getUniqueId())) {
-            return new NoAreaException("You are not the owner of this area.").sendCause(player);
         }
 
         Warp warp = WarpUtil.getWarp(player.getUniqueId());

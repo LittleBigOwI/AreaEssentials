@@ -3,7 +3,6 @@ package net.philocraft.events;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -62,8 +61,6 @@ public class OnPlayerInteractEvent implements Listener {
             boundingBox
         );
 
-        Bukkit.getLogger().warning(area.getCreationDate() + "");
-
         if(!area.isValid()) {
             return null;
         }
@@ -100,28 +97,30 @@ public class OnPlayerInteractEvent implements Listener {
 
         if(action == Action.LEFT_CLICK_BLOCK) {
             OnPlayerInteractEvent.addCorner(player, block, 0);
-            player.sendMessage(Colors.SUCCESS.getChatColor() + "Position #1 is set.");
-
-            if(corners.get(player).size() == 2 && OnPlayerInteractEvent.setupArea(player) != null) {
-                new AreaCreateComponent(player, "Area selected! Click this message to create it!").send();
-                AreaUtil.addPotentialArea(player, OnPlayerInteractEvent.setupArea(player));
             
-            } else if(corners.get(player).size() == 2 && OnPlayerInteractEvent.setupArea(player) == null) {
-                new AreaExistsException().sendCause(player);
-
+            if(corners.get(player).size() == 2 && OnPlayerInteractEvent.setupArea(player) == null) {
+                new AreaExistsException("Invalid corner placement.").sendCause(player);
+            } else {
+                player.sendMessage(Colors.SUCCESS.getChatColor() + "Position #1 is set."); 
             }
 
-        } else if(action == Action.RIGHT_CLICK_BLOCK && event.getHand().equals(EquipmentSlot.HAND)) {            
+            if(corners.get(player).size() == 2 && OnPlayerInteractEvent.setupArea(player) != null) {
+                new AreaCreateComponent(player, "Area selected! Click this message to create it!").send();
+                AreaUtil.addPotentialArea(player, OnPlayerInteractEvent.setupArea(player));
+            }
+
+        } else if(action == Action.RIGHT_CLICK_BLOCK && event.getHand().equals(EquipmentSlot.HAND)) {     
             OnPlayerInteractEvent.addCorner(player, block, 1);
-            player.sendMessage(Colors.SUCCESS.getChatColor() + "Position #2 is set.");
+
+            if(corners.get(player).size() == 2 && OnPlayerInteractEvent.setupArea(player) == null) {
+                new AreaExistsException("Invalid corner placement.").sendCause(player);
+            } else {
+                player.sendMessage(Colors.SUCCESS.getChatColor() + "Position #2 is set."); 
+            }
 
             if(corners.get(player).size() == 2 && OnPlayerInteractEvent.setupArea(player) != null) {
                 new AreaCreateComponent(player, "Area selected! Click this message to create it!").send();
                 AreaUtil.addPotentialArea(player, OnPlayerInteractEvent.setupArea(player));
-            
-            } else if(corners.get(player).size() == 2 && OnPlayerInteractEvent.setupArea(player) == null) {
-                new AreaExistsException().sendCause(player);
-
             }
         }
 

@@ -281,8 +281,6 @@ public class Area {
     }
 
     public double expand(Player player, int amount) {
-        this.hide(player);
-        
         CardinalDirection direction = this.getDirection(player);
         BoundingBox newBox = this.box.clone().expand(direction.asVector(), amount);
         
@@ -292,6 +290,14 @@ public class Area {
         if(!this.isValid(newBox)) {
             return -1;
         }
+
+        for(Area area : AreaUtil.getAreas()) {
+            if(area.overlaps(newBox) && !area.getName().equals(this.getName())) {
+                return -1;
+            }
+        }
+
+        this.hide(player);
 
         double cost = newSurface - currentSurface;
         this.box.expand(direction.asVector(), amount);
@@ -380,4 +386,11 @@ public class Area {
         });
     }
 
+    public boolean overlaps(BoundingBox box) {
+        return this.box.overlaps(box);
+    }
+
+    public boolean overlaps(Area area) {
+        return this.box.overlaps(area.box);
+    }
 }

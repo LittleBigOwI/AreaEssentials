@@ -4,6 +4,7 @@ import org.bukkit.entity.Player;
 
 import dev.littlebigowl.api.constants.Colors;
 import dev.littlebigowl.api.errors.InvalidArgumentsException;
+import net.philocraft.errors.AreaExistsException;
 import net.philocraft.errors.NoAreaException;
 import net.philocraft.errors.NotEnoughClaimsException;
 import net.philocraft.models.Area;
@@ -61,6 +62,10 @@ public class AreaExpandSubcommand extends Subcommand {
         }
 
         int cost = (int)area.expand(player, amount);
+
+        if(cost == -1) {
+            return new AreaExistsException().sendCause(player);
+        }
         
         if(cost > ClaimUtil.getClaimBlocks(player)) {
             return new NotEnoughClaimsException().sendCause(player);

@@ -52,14 +52,24 @@ public class AreaCreateSubcommand extends Subcommand {
             return new AreaExistsException("You already have an area with that name.").sendCause(player);
         }
 
+        for(Area playerArea : AreaUtil.getAreas()) {
+            if(potentialArea.overlaps(playerArea)) {
+                return new AreaExistsException("This area overlaps with another.").sendCause(player);
+            }
+        }
+
         String name = null;
 
         if(args.length == 2 && args[1] != null) {
             name = args[1];
         }
 
-        if(name != null && name.contains("'") || name.contains("\\") || name.contains("\"")) {
+        if(name != null && (name.contains("'") || name.contains("\\") || name.contains("\""))) {
             return new InvalidArgumentsException("Area names can't contain \\, ' or \" characters.").sendCause(player);
+
+        } else if(name != null) {
+            potentialArea.setName(name);
+
         }
 
         try {
@@ -69,7 +79,8 @@ public class AreaCreateSubcommand extends Subcommand {
             AreaEssentials.getPlugin().getLogger().severe("Couldn't save area : " + e.getMessage());
         }
         player.sendMessage(Colors.SUCCESS.getChatColor() + "Successfully created new area for " + potentialArea.getSurface() + " claim blocks.");
-        
+        ClaimUtil.setClaimModeOff(player);
+
         potentialArea.draw();
         return true;
     }
