@@ -61,7 +61,7 @@ public class AreaExpandSubcommand extends Subcommand {
             return new InvalidArgumentsException("You cannot expand an area by a negative amount.").sendCause(player);
         }
 
-        int cost = (int)area.expand(player, amount);
+        int cost = (int)area.getExpandCost(player, amount);
 
         if(cost == -1) {
             return new AreaExistsException().sendCause(player);
@@ -71,10 +71,12 @@ public class AreaExpandSubcommand extends Subcommand {
             return new NotEnoughClaimsException().sendCause(player);
         }
 
-        ClaimUtil.addClaimBlocks(player, amount*-1);
-        player.sendMessage(Colors.SUCCESS.getChatColor() + "Expanded " + area.getName() + " by " + amount + " blocks for " + cost + " claim blocks.");
+        ClaimUtil.addClaimBlocks(player, cost*-1);
         
+        area.expand(player, amount);
         area.draw();
+
+        player.sendMessage(Colors.SUCCESS.getChatColor() + "Expanded " + area.getName() + " by " + amount + " blocks for " + cost + " claim blocks."); 
         return true;
     }
     

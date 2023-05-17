@@ -60,16 +60,18 @@ public class AreaShrinkSubcommand extends Subcommand {
             return new InvalidArgumentsException("You cannot shrink an area by a negative amount.").sendCause(player);
         }
 
-        int cost = (int)area.shrink(player, amount);
+        int cost = (int)area.getShrinkCost(player, amount);
 
         if(cost == -1) {
             return new AreaTooSmallException().sendCause(player);
         }
 
-        ClaimUtil.addClaimBlocks(player, amount);      
-        player.sendMessage(Colors.SUCCESS.getChatColor() + "Shrinked " + area.getName() + " by " + amount + " blocks for " + cost + " claim blocks.");
-        
+        ClaimUtil.addClaimBlocks(player, cost);      
+                
+        area.shrink(player, amount);
         area.draw();
+        
+        player.sendMessage(Colors.SUCCESS.getChatColor() + "Shrinked " + area.getName() + " by " + amount + " blocks for " + cost + " claim blocks.");
         return true;
     }
     

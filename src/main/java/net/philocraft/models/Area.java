@@ -280,7 +280,25 @@ public class Area {
         player.sendBlockChange(location, player.getWorld().getBlockData(location));      
     }
 
-    public double expand(Player player, int amount) {
+    public void expand(Player player, int amount) {
+        CardinalDirection direction = this.getDirection(player);
+        
+        this.hide(player);
+        this.box.expand(direction.asVector(), amount);
+        this.show(player);
+
+        try {
+            AreaUtil.saveArea(this);
+        } catch (SQLException e) {
+            AreaEssentials.getPlugin().getLogger().severe("Couldn't save area : " + e.getMessage());
+        }
+    }
+
+    public void shrink(Player player, int amount) {
+        this.expand(player, amount*-1);
+    }
+
+    public double getExpandCost(Player player, int amount) {
         CardinalDirection direction = this.getDirection(player);
         BoundingBox newBox = this.box.clone().expand(direction.asVector(), amount);
         
@@ -297,23 +315,12 @@ public class Area {
             }
         }
 
-        this.hide(player);
-
-        double cost = newSurface - currentSurface;
-        this.box.expand(direction.asVector(), amount);
-        
-        this.show(player);
-
-        try {
-            AreaUtil.saveArea(this);
-        } catch (SQLException e) {
-            AreaEssentials.getPlugin().getLogger().severe("Couldn't save area : " + e.getMessage());
-        }
-        return cost;
+        return newSurface - currentSurface;
     }
 
-    public double shrink(Player player, int amount) {
-        double cost = this.expand(player, amount*-1);
+
+    public double getShrinkCost(Player player, int amount) {
+        double cost = this.getExpandCost(player, amount*-1);
 
         if(cost == -1) {
             return cost;

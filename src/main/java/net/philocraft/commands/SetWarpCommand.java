@@ -42,21 +42,29 @@ public class SetWarpCommand implements CommandExecutor, TabCompleter {
         Location location = player.getLocation();
 
         if(name.contains("'") || name.contains("\\") || name.contains("\"")) {
-            return new InvalidArgumentsException("Home names can't contain \\, ' or \" characters.").sendCause(sender);
+            return new InvalidArgumentsException("Warp names can't contain \\, ' or \" characters.").sendCause(sender);
         }
 
         Warp warp = WarpUtil.getWarp(player.getUniqueId());
 
         for(Warp w : WarpUtil.getWarps()) {
-            if(warp != null && w.getName().equals(warp.getName()) && !warp.getUUID().equals(player.getUniqueId())) {
+            if(warp != null && w.getName().equals(warp.getName()) && !warp.getUUID().equals(w.getUUID())) {
                 return new InvalidArgumentsException("There is already a warp with that name.").sendCause(player);
             }
         }
         
         if(warp != null && args.length == 2) {
             if(args[1].equals("override")) {
+                String warpName = args[0];
+
+                for(Warp w : WarpUtil.getWarps()) {
+                    if(w.getName().equals(warpName) && !w.getUUID().equals(player.getUniqueId())) {
+                        return new InvalidArgumentsException("There is already a warp with that name.").sendCause(player);
+                    }
+                }
+
                 warp.setLocation(location);
-                warp.setName(args[0]);
+                warp.setName(warpName);
 
                 try {
                     WarpUtil.saveWarp(warp);
@@ -84,6 +92,12 @@ public class SetWarpCommand implements CommandExecutor, TabCompleter {
             
         } else {
             warp = new Warp(player.getUniqueId(), name, location);
+
+            for(Warp w : WarpUtil.getWarps()) {
+                if(w.getName().equals(warp.getName()) && !warp.getUUID().equals(w.getUUID())) {
+                    return new InvalidArgumentsException("There is already a warp with that name.").sendCause(player);
+                }
+            }
             
             try {
                 WarpUtil.saveWarp(warp);
