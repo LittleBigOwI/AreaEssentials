@@ -62,7 +62,8 @@ public class SetWarpCommand implements CommandExecutor, TabCompleter {
                         return new InvalidArgumentsException("There is already a warp with that name.").sendCause(player);
                     }
                 }
-
+                
+                warp.erase();
                 warp.setLocation(location);
                 warp.setName(warpName);
 
