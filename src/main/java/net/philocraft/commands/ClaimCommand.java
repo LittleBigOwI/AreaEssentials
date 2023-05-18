@@ -14,8 +14,10 @@ import dev.littlebigowl.api.constants.Colors;
 import dev.littlebigowl.api.errors.InvalidArgumentsException;
 import dev.littlebigowl.api.errors.InvalidSenderException;
 import net.philocraft.commands.subcommands.claim.ClaimBlocksSubcommand;
+import net.philocraft.commands.subcommands.claim.ClaimBuySubcommand;
 import net.philocraft.commands.subcommands.claim.ClaimOffSubcommand;
 import net.philocraft.commands.subcommands.claim.ClaimOnSubcommand;
+import net.philocraft.commands.subcommands.claim.ClaimShopSubcommand;
 import net.philocraft.models.Subcommand;
 import net.philocraft.utils.ClaimUtil;
 
@@ -28,6 +30,8 @@ public class ClaimCommand implements CommandExecutor, TabCompleter {
         this.subcommands.add(new ClaimOffSubcommand());
 
         this.subcommands.add(new ClaimBlocksSubcommand());
+        this.subcommands.add(new ClaimShopSubcommand());
+        this.subcommands.add(new ClaimBuySubcommand());
     }
 
     @Override
@@ -35,14 +39,6 @@ public class ClaimCommand implements CommandExecutor, TabCompleter {
         
         if(!(sender instanceof Player)) {
             return new InvalidSenderException().sendCause(sender);
-        }
-
-        if(args.length > 1) {
-            return new InvalidArgumentsException().sendCause(sender);
-        }
-
-        if(args.length == 1 && !args[0].equals("on") && !args[0].equals("off") && !args[0].equals("blocks")) {
-            return new InvalidArgumentsException("You can only turn claim mode on or off.").sendCause(sender);
         }
 
         Player player = (Player)sender;
@@ -74,7 +70,7 @@ public class ClaimCommand implements CommandExecutor, TabCompleter {
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
         if(args.length == 1) {
-            return new ArrayList<>(Arrays.asList("on", "off", "blocks"));
+            return new ArrayList<>(Arrays.asList("on", "off", "blocks", "shop"));
         }
         return new ArrayList<>();
     }

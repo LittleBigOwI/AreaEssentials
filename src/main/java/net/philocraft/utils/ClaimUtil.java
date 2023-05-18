@@ -18,6 +18,7 @@ public class ClaimUtil {
     private static HashMap<UUID, Integer> playerBlocks = new HashMap<>();
     private static HashMap<Player, Integer> playtimeBlocks = new HashMap<>();
     private static HashMap<Player, String> playtimeTeamBlocks = new HashMap<>();
+    private static HashMap<Player, Boolean> wantsToBuy = new HashMap<>();
 
     private static final HashMap<Player, Boolean> claims = new HashMap<>();
     private static final int claimAmount = AreaEssentials.api.areas.getPassiveClaimAmount();
@@ -162,6 +163,24 @@ public class ClaimUtil {
         } catch (SQLException e) {
             AreaEssentials.getPlugin().getLogger().severe("Couldn't update claims : " + e.getMessage());
         }
+    }
+
+    public static void setBuyModeOn(Player player) {
+        ClaimUtil.wantsToBuy.put(player, true);
+    }
+
+    public static void setBuyModeOff(Player player) {
+        ClaimUtil.wantsToBuy.put(player, false);
+    }
+
+    public static boolean getBuyMode(Player player) {
+        Boolean wantsToBuy = ClaimUtil.wantsToBuy.get(player);
+
+        if(wantsToBuy == null) {
+            ClaimUtil.setBuyModeOff(player);
+            return false;
+        }
+        return wantsToBuy;
     }
 
 }
