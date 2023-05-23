@@ -15,10 +15,8 @@ import dev.littlebigowl.api.constants.Colors;
 import dev.littlebigowl.api.errors.InvalidArgumentsException;
 import dev.littlebigowl.api.errors.InvalidSenderException;
 import net.philocraft.AreaEssentials;
-import net.philocraft.errors.NoAreaException;
 import net.philocraft.errors.WarpNotFoundException;
 import net.philocraft.models.Warp;
-import net.philocraft.utils.AreaUtil;
 import net.philocraft.utils.WarpUtil;
 
 public class DelWarpCommand implements CommandExecutor, TabCompleter {
@@ -34,19 +32,6 @@ public class DelWarpCommand implements CommandExecutor, TabCompleter {
         }
 
         Player player = (Player)sender;
-
-        int i = 0;
-        while(i < AreaUtil.getAreas().size() && !AreaUtil.getAreas().get(i).contains(player)) {
-            i++;
-        }
-
-        if(i == AreaUtil.getAreas().size()) {
-            return new NoAreaException().sendCause(player);
-        }
-
-        if(!AreaUtil.getAreas().get(i).getUUID().equals(player.getUniqueId())) {
-            return new NoAreaException("You are not the owner of this area.").sendCause(player);
-        }
 
         Warp warp = WarpUtil.getWarp(player.getUniqueId());
         
@@ -89,7 +74,5 @@ public class DelWarpCommand implements CommandExecutor, TabCompleter {
     public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
         return new ArrayList<>();
     }
-
-    
     
 }
