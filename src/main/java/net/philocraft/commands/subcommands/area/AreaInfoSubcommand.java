@@ -56,7 +56,7 @@ public class AreaInfoSubcommand extends Subcommand {
             ChatColor.WHITE + "Area Info :" + ChatColor.RESET + "\n" +
             Colors.INFO.getChatColor() + "[Owner] - " + Colors.INFO_DARK.getChatColor() + Bukkit.getOfflinePlayer(area.getUUID()).getName() + "\n" +
             Colors.INFO.getChatColor() + "[Name] - " + Colors.INFO_DARK.getChatColor() + area.getName() + "\n" +
-            Colors.INFO.getChatColor() + "[Surface] - " + Colors.INFO_DARK.getChatColor() + area.getSurface() + "\n" +
+            Colors.INFO.getChatColor() + "[Surface] - " + Colors.INFO_DARK.getChatColor() + area.getSurface() + " m²\n" +
             Colors.INFO.getChatColor() + "[Creation] - " + Colors.INFO_DARK.getChatColor() + dateFormat.format(new Date(area.getCreationDate())) + "\n" +
             Colors.INFO.getChatColor() + "[mobGriefing] - " + Colors.INFO_DARK.getChatColor() + area.getPermission("mobGriefing") + "\n" +
             Colors.INFO.getChatColor() + "[doPVP] - " + Colors.INFO_DARK.getChatColor() + area.getPermission("doPVP")
