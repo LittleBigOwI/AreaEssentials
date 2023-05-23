@@ -54,7 +54,7 @@ public class AreaInfoSubcommand extends Subcommand {
 
         String info = "" +
             ChatColor.WHITE + "Area Info :" + ChatColor.RESET + "\n" +
-            Colors.INFO.getChatColor() + "[Owner] - " + Colors.INFO_DARK.getChatColor() + Bukkit.getPlayer(area.getUUID()).getName() + "\n" +
+            Colors.INFO.getChatColor() + "[Owner] - " + Colors.INFO_DARK.getChatColor() + Bukkit.getOfflinePlayer(area.getUUID()).getName() + "\n" +
             Colors.INFO.getChatColor() + "[Name] - " + Colors.INFO_DARK.getChatColor() + area.getName() + "\n" +
             Colors.INFO.getChatColor() + "[Surface] - " + Colors.INFO_DARK.getChatColor() + area.getSurface() + "\n" +
             Colors.INFO.getChatColor() + "[Creation] - " + Colors.INFO_DARK.getChatColor() + dateFormat.format(new Date(area.getCreationDate())) + "\n" +
