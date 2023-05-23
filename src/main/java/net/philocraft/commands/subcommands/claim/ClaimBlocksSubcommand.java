@@ -32,7 +32,7 @@ public class ClaimBlocksSubcommand extends Subcommand {
 
         player.sendMessage(
             Colors.INFO.getChatColor() + "You have " + 
-            Colors.MAJOR.getChatColor() + ClaimUtil.getClaimBlocks(player) + 
+            Colors.INFO_DARK.getChatColor() + ClaimUtil.getClaimBlocks(player) + 
             Colors.INFO.getChatColor() + " claim blocks."
         );
 

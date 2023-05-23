@@ -71,7 +71,15 @@ public class AreaShrinkSubcommand extends Subcommand {
         area.shrink(player, amount);
         area.draw();
         
-        player.sendMessage(Colors.SUCCESS.getChatColor() + "Shrinked " + area.getName() + " by " + amount + " blocks for " + cost + " claim blocks.");
+        player.sendMessage(
+            Colors.SUCCESS.getChatColor() + "Shrinked " + 
+            Colors.SUCCESS_DARK.getChatColor() + area.getName() + 
+            Colors.SUCCESS.getChatColor() + " by " + 
+            Colors.SUCCESS_DARK.getChatColor() + amount + 
+            Colors.SUCCESS.getChatColor() + " blocks for " + 
+            Colors.SUCCESS_DARK.getChatColor() + cost + 
+            Colors.SUCCESS.getChatColor() + " claim blocks."
+        );
         return true;
     }
     

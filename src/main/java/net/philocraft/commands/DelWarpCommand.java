@@ -63,7 +63,7 @@ public class DelWarpCommand implements CommandExecutor, TabCompleter {
                 }
 
                 warp.erase();
-                player.sendMessage(Colors.SUCCESS.getChatColor() + "Successfully deleted " + Colors.INFO.getChatColor() + warp.getName() + Colors.SUCCESS.getChatColor() + ".");
+                player.sendMessage(Colors.SUCCESS.getChatColor() + "Successfully deleted " + Colors.SUCCESS_DARK.getChatColor() + warp.getName() + Colors.SUCCESS.getChatColor() + ".");
 
             } else if(args[0].equals("cancel")) {
                 player.sendMessage(Colors.SUCCESS.getChatColor() + "Successfully canceled deletion.");

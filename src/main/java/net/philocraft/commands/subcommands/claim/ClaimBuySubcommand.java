@@ -56,8 +56,11 @@ public class ClaimBuySubcommand extends Subcommand {
         }
 
         ClaimUtil.addClaimBlocks(player, productAmount);
-        player.sendMessage(Colors.SUCCESS.getChatColor() + "Successfully purchased " + productAmount + " claims blocks from the shop.");
-
+        player.sendMessage(
+            Colors.SUCCESS.getChatColor() + "Successfully purchased " + 
+            Colors.SUCCESS_DARK.getChatColor() + productAmount + 
+            Colors.SUCCESS.getChatColor() + " claims blocks from the shop."
+        );
         return true;
     }
     

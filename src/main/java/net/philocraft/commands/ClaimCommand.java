@@ -45,7 +45,9 @@ public class ClaimCommand implements CommandExecutor, TabCompleter {
         
         if(args.length == 0) {
             ClaimUtil.toggleClaimMode(player);
-            player.sendMessage(Colors.SUCCESS.getChatColor() + "Toggled claim mode " + ClaimUtil.getFormatedClaimMode(player) + ".");
+            player.sendMessage(
+                Colors.SUCCESS.getChatColor() + "Toggled claim mode " + 
+                Colors.SUCCESS_DARK.getChatColor() + ClaimUtil.getFormatedClaimMode(player) + ".");
             return true;
         }
 

@@ -74,7 +74,7 @@ public class SetWarpCommand implements CommandExecutor, TabCompleter {
                 }
 
                 warp.draw();
-                player.sendMessage(Colors.SUCCESS.getChatColor() + "Successfully overridden " + Colors.INFO.getChatColor() + warp.getName() + Colors.SUCCESS.getChatColor() + ".");
+                player.sendMessage(Colors.SUCCESS.getChatColor() + "Successfully overridden " + Colors.SUCCESS_DARK.getChatColor() + warp.getName() + Colors.SUCCESS.getChatColor() + ".");
 
             } else if(args[1].equals("cancel")) {
                 player.sendMessage(Colors.SUCCESS.getChatColor() + "Successfully canceled override.");
@@ -107,7 +107,7 @@ public class SetWarpCommand implements CommandExecutor, TabCompleter {
             }
 
             warp.draw();
-            player.sendMessage(Colors.SUCCESS.getChatColor() + "Successfully created new " + Colors.INFO.getChatColor() + warp.getName() + Colors.SUCCESS.getChatColor() + " warp.");
+            player.sendMessage(Colors.SUCCESS.getChatColor() + "Successfully created new " + Colors.SUCCESS_DARK.getChatColor() + warp.getName() + Colors.SUCCESS.getChatColor() + " warp.");
         }
 
         return true;

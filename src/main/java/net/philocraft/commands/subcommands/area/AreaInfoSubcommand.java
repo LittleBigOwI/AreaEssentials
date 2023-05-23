@@ -54,12 +54,12 @@ public class AreaInfoSubcommand extends Subcommand {
 
         String info = "" +
             ChatColor.WHITE + "Area Info :" + ChatColor.RESET + "\n" +
-            Colors.INFO.getChatColor() + "[Owner] - " + Colors.MAJOR.getChatColor() + Bukkit.getPlayer(area.getUUID()).getName() + "\n" +
-            Colors.INFO.getChatColor() + "[Name] - " + Colors.MAJOR.getChatColor() + area.getName() + "\n" +
-            Colors.INFO.getChatColor() + "[Surface] - " + Colors.MAJOR.getChatColor() + area.getSurface() + "\n" +
-            Colors.INFO.getChatColor() + "[Creation] - " + Colors.MAJOR.getChatColor() + dateFormat.format(new Date(area.getCreationDate())) + "\n" +
-            Colors.INFO.getChatColor() + "[mobGriefing] - " + Colors.MAJOR.getChatColor() + area.getPermission("mobGriefing") + "\n" +
-            Colors.INFO.getChatColor() + "[doPVP] - " + Colors.MAJOR.getChatColor() + area.getPermission("doPVP")
+            Colors.INFO.getChatColor() + "[Owner] - " + Colors.INFO_DARK.getChatColor() + Bukkit.getPlayer(area.getUUID()).getName() + "\n" +
+            Colors.INFO.getChatColor() + "[Name] - " + Colors.INFO_DARK.getChatColor() + area.getName() + "\n" +
+            Colors.INFO.getChatColor() + "[Surface] - " + Colors.INFO_DARK.getChatColor() + area.getSurface() + "\n" +
+            Colors.INFO.getChatColor() + "[Creation] - " + Colors.INFO_DARK.getChatColor() + dateFormat.format(new Date(area.getCreationDate())) + "\n" +
+            Colors.INFO.getChatColor() + "[mobGriefing] - " + Colors.INFO_DARK.getChatColor() + area.getPermission("mobGriefing") + "\n" +
+            Colors.INFO.getChatColor() + "[doPVP] - " + Colors.INFO_DARK.getChatColor() + area.getPermission("doPVP")
         ;
 
         player.sendMessage(info);

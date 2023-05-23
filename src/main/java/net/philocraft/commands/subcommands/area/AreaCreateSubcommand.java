@@ -78,7 +78,12 @@ public class AreaCreateSubcommand extends Subcommand {
         } catch (SQLException e) {
             AreaEssentials.getPlugin().getLogger().severe("Couldn't save area : " + e.getMessage());
         }
-        player.sendMessage(Colors.SUCCESS.getChatColor() + "Successfully created new area for " + potentialArea.getSurface() + " claim blocks.");
+        
+        player.sendMessage(
+            Colors.SUCCESS.getChatColor() + "Successfully created new area for " + 
+            Colors.SUCCESS_DARK.getChatColor() + potentialArea.getSurface() + 
+            Colors.SUCCESS.getChatColor() + " claim blocks."
+        );
         ClaimUtil.setClaimModeOff(player);
 
         potentialArea.draw();

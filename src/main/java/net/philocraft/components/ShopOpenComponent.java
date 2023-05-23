@@ -35,7 +35,7 @@ public class ShopOpenComponent {
                 if(j%2 == 0) {
                     message[i][j].setColor(Colors.WARNING.getChatColor());
                 } else {
-                    message[i][j].setColor(Colors.POPUP.getChatColor());
+                    message[i][j].setColor(Colors.WARNING_DARK.getChatColor());
                 }
             }
         }

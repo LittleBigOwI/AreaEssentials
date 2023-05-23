@@ -95,9 +95,9 @@ public class ClaimUtil {
                     player.playSound(player.getEyeLocation(), Sound.ENTITY_PLAYER_LEVELUP, 2f, 2f);
                     player.sendMessage(
                         Colors.WARNING.getChatColor() + "You earned " + 
-                        Colors.POPUP.getChatColor() + claimAmount + 
+                        Colors.WARNING_DARK.getChatColor() + claimAmount + 
                         Colors.WARNING.getChatColor() + " claim blocks for playing " + 
-                        Colors.POPUP.getChatColor() + claimInterval + 
+                        Colors.WARNING_DARK.getChatColor() + claimInterval + 
                         Colors.WARNING.getChatColor() + " minutes!"
                     );
                 }
@@ -108,7 +108,7 @@ public class ClaimUtil {
                     player.playSound(player.getEyeLocation(), Sound.ENTITY_PLAYER_LEVELUP, 2f, 2f);
                     player.sendMessage(
                         Colors.WARNING.getChatColor() + "You earned " + 
-                        Colors.POPUP.getChatColor() + bonus + 
+                        Colors.WARNING_DARK.getChatColor() + bonus + 
                         Colors.WARNING.getChatColor() + " claim blocks for moving up to the next rank!"
                     );
                 }
