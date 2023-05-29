@@ -72,7 +72,7 @@ public class Warp {
         POIMarker marker = POIMarker.builder()
             .label(this.getName())
             .minDistance(0.0)
-            .maxDistance(1000)
+            .maxDistance(500)
             .position(this.getX(), this.getY(), this.getZ())
             .build();
 
