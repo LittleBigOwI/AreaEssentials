@@ -49,7 +49,7 @@ public class AreaInfoSubcommand extends Subcommand {
 
         Area area = AreaUtil.getAreas().get(i);
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss z");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyy HH:mm:ss z");
         dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+2"));
 
         String info = "" +

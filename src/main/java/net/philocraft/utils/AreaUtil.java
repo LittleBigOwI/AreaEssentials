@@ -2,6 +2,8 @@ package net.philocraft.utils;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -21,13 +23,14 @@ public class AreaUtil {
     private static final HashMap<UUID, Area> potentialAreas = new HashMap<>();
     private static final HashMap<UUID, ArrayList<Area>> areas = new HashMap<>();
 
-    public static void loadAreas() throws SQLException {
+    public static void loadAreas() throws SQLException, NumberFormatException, ParseException {
         AreaEssentials.api.database.create(
             "CREATE TABLE IF NOT EXISTS Areas(" +
             "id int NOT NULL UNIQUE AUTO_INCREMENT, " +
             "uuid TEXT NOT NULL, " + 
             "name TEXT NOT NULL, " +
             "color TEXT NOT NULL, " +
+            "creation DATETIME," +
             "enterMessage TEXT, " + 
             "leaveMessage TEXT, " +
             "groupName TEXT NOT NULL, " +
@@ -45,7 +48,7 @@ public class AreaUtil {
                 results.getString("enterMessage"),
                 results.getString("leaveMessage"),
                 results.getString("groupName"),
-                results.getDate("creation").getTime(),
+                new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(results.getString("creation")).getTime(),
                 Color.decode(results.getString("color")),
                 UUID.fromString(results.getString("uuid")),
                 

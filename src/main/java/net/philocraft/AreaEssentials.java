@@ -1,6 +1,7 @@
 package net.philocraft;
 
 import java.sql.SQLException;
+import java.text.ParseException;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -41,7 +42,7 @@ public class AreaEssentials extends JavaPlugin {
             try {
                 AreaUtil.loadAreas();
                 this.getLogger().info("Loaded " + AreaUtil.getAreas().size() + " areas.");
-            } catch (SQLException e) {
+            } catch (SQLException | ParseException e) {
                 this.getLogger().severe("Couldn't load areas : " + e.getMessage());
             }
 
