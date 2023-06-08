@@ -30,7 +30,7 @@ public class AreaUtil {
             "uuid TEXT NOT NULL, " + 
             "name TEXT NOT NULL, " +
             "color TEXT NOT NULL, " +
-            "creation DATETIME," +
+            "creation DATETIME DEFAULT(CURRENT_TIMESTAMP)," +
             "enterMessage TEXT, " + 
             "leaveMessage TEXT, " +
             "groupName TEXT NOT NULL, " +
