@@ -14,15 +14,13 @@ public class OnEntityDamageEvent implements Listener {
     public void onEntityDamage(EntityDamageByEntityEvent event) {
 
         if(event.getEntity() instanceof Player && event.getDamager() instanceof Player) {
-            Player attacker = (Player) event.getDamager();
-            Player attacked = (Player) event.getEntity();
+            Player attacker = (Player)event.getDamager();
+            Player attacked = (Player)event.getEntity();
 
             Area attackerArea = AreaUtil.getArea(attacker.getLocation());
             Area attackedArea = AreaUtil.getArea(attacked.getLocation());
 
-            if(attackerArea != null && !(attackerArea.getPermission("doPVP"))) {
-                event.setCancelled(true);
-            } else if(attackedArea != null && !(attackedArea.getPermission("doPVP"))) {
+            if((attackerArea != null && !attackerArea.getPermission("doPVP")) || (attackedArea != null && !attackedArea.getPermission("doPVP"))) {
                 event.setCancelled(true);
             }
         }
