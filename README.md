@@ -67,6 +67,8 @@ The `/area` command has multiple subcommands:
   - `mobGriefing`: Toggles creeper explosions and enderman griefing.
   - `doPVP`: Toggles player versus player
 
+- `/area trust [player] [permission] [true/false/default]`: Allows players to set player specific permissions for their areas. The default option resets the player specific permission the default ones set with the `/area edit permissions` command.
+
 ### Warps
 
 A warp is a public home. The plugin is automatically configured for players to have only one warp. They can set their warp anywhere with the `/setwarp [warpName]` command. If in any case a player wants to remove their warp, they can use the `/delwarp` command which doesn't need a warp name since players can only have one. Note that all warps must have a different name so that players won't confuse them. If players want to teleport to a warp, the `/warp [warpName]` command can be used as long as a valid warp name is specified.
