@@ -4,15 +4,15 @@ import org.bukkit.command.CommandSender;
 
 import dev.littlebigowl.api.constants.Colors;
 
-public class InvalidMaterialException {
+public class BadAreaException {
     
     private String cause;
 
-    public InvalidMaterialException() {
-        this.cause = Colors.FAILURE.getChatColor() + "You don't have the correct material";
+    public BadAreaException() {
+        this.cause = Colors.FAILURE.getChatColor() + "Could not find area.";
     }
 
-    public InvalidMaterialException(String cause) {
+    public BadAreaException(String cause) {
         this.cause = Colors.FAILURE.getChatColor() + cause;
     }
 

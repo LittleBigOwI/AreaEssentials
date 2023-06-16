@@ -15,7 +15,6 @@ import dev.littlebigowl.api.constants.Colors;
 import dev.littlebigowl.api.errors.InvalidArgumentsException;
 import dev.littlebigowl.api.errors.InvalidSenderException;
 import net.philocraft.AreaEssentials;
-import net.philocraft.errors.WarpNotFoundException;
 import net.philocraft.models.Warp;
 import net.philocraft.utils.WarpUtil;
 
@@ -36,7 +35,7 @@ public class DelWarpCommand implements CommandExecutor, TabCompleter {
         Warp warp = WarpUtil.getWarp(player.getUniqueId());
         
         if(warp == null) {
-            return new WarpNotFoundException().sendCause(sender);
+            return new InvalidArgumentsException("Could not find warp.").sendCause(sender);
         }
         
         if(args.length == 1) {

@@ -10,7 +10,7 @@ import net.philocraft.commands.subcommands.area.edit.AreaEditEnterMessageSubcomm
 import net.philocraft.commands.subcommands.area.edit.AreaEditLeaveMessageSubcommand;
 import net.philocraft.commands.subcommands.area.edit.AreaEditNameSubcommand;
 import net.philocraft.commands.subcommands.area.edit.AreaEditPermissionsSubcommand;
-import net.philocraft.errors.NoAreaException;
+import net.philocraft.errors.BadAreaException;
 import net.philocraft.models.Area;
 import net.philocraft.models.Subcommand;
 import net.philocraft.utils.AreaUtil;
@@ -47,25 +47,20 @@ public class AreaEditSubcommand extends Subcommand {
     @Override
     public boolean perform(Player player, String[] args) {
 
-        int i = 0;
-        while(i < AreaUtil.getAreas().size() && !AreaUtil.getAreas().get(i).contains(player)) {
-            i++;
+        area = AreaUtil.getArea(player.getLocation());
+
+        if(area == null) {
+            return new BadAreaException().sendCause(player);
         }
 
-        if(i == AreaUtil.getAreas().size()) {
-            return new NoAreaException().sendCause(player);
+        if(!area.getUUID().equals(player.getUniqueId())) {
+            return new BadAreaException("You are not the owner of this area.").sendCause(player);
         }
-
-        if(!AreaUtil.getAreas().get(i).getUUID().equals(player.getUniqueId())) {
-            return new NoAreaException("You are not the owner of this area.").sendCause(player);
-        }
-
-        area = AreaUtil.getAreas().get(i);
 
         boolean performedCommand = false;
 
         if(args.length > 1) {
-            for(i = 0; i < this.subcommands.size(); i++) {
+            for(int i = 0; i < this.subcommands.size(); i++) {
                 if(args[1].equalsIgnoreCase(this.subcommands.get(i).getName())) {
                     this.subcommands.get(i).perform(player, args);
                     performedCommand = true;

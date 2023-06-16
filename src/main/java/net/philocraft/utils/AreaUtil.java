@@ -37,7 +37,9 @@ public class AreaUtil {
             "p1 TEXT NOT NULL, " +
             "p2 TEXT NOT NULL, " +
             "mobGriefing BOOLEAN DEFAULT 0, " +
-            "doPVP BOOLEAN DEFAULT 0);"
+            "doPVP BOOLEAN DEFAULT 0, " +
+            "doBuilding BOOLEAN DEFAULT 1, " +
+            "doInteracting BOOLEAN DEFAULT 1);"
         );
 
         ResultSet results = AreaEssentials.api.database.fetch("SELECT * FROM Areas;");
@@ -58,7 +60,9 @@ public class AreaUtil {
                 ),
                 
                 results.getBoolean("mobGriefing"),
-                results.getBoolean("doPVP")
+                results.getBoolean("doPVP"),
+                results.getBoolean("doBuilding"),
+                results.getBoolean("doInteracting")
             );
 
             ArrayList<Area> playerAreas = AreaUtil.areas.get(UUID.fromString(results.getString("uuid")));
@@ -162,7 +166,9 @@ public class AreaUtil {
                 "p1, " +
                 "p2, " +
                 "mobGriefing, " +
-                "doPVP" +
+                "doPVP," +
+                "doBuilding," +
+                "doInteracting," +
             ") VALUES('" +
                 area.getUUID() + "', '" +
                 area.getName() + "', '" + 
@@ -173,7 +179,9 @@ public class AreaUtil {
                 area.getPoints()[0].getX() + "@" + area.getPoints()[0].getY() + "', '" +
                 area.getPoints()[1].getX() + "@" + area.getPoints()[1].getY() + "', " +
                 area.getPermission("mobGriefing") + ", " +
-                area.getPermission("doPVP") + "" +
+                area.getPermission("doPVP") + ", " +
+                area.getPermission("doBuilding") + ", " +
+                area.getPermission("doInteracting") + "" +
             ");"
         );
     }
@@ -201,7 +209,9 @@ public class AreaUtil {
             "p1='" + area.getPoints()[0].getX() + "@" + area.getPoints()[0].getY() + "', " +
             "p2='" + area.getPoints()[1].getX() + "@" + area.getPoints()[1].getY() + "', " +
             "mobGriefing=" + area.getPermission("mobGriefing") + ", " +
-            "doPVP=" + area.getPermission("doPVP") + " " +
+            "doPVP=" + area.getPermission("doPVP") + ", " +
+            "doBuilding=" + area.getPermission("doBuilding") + ", " +
+            "doInteracting=" + area.getPermission("doInteracting") + " " +
             "WHERE uuid='" + area.getUUID() + "' " + 
             "AND name='" + area.getName() + "';"
         );
@@ -225,7 +235,56 @@ public class AreaUtil {
     }
 
     public static ArrayList<String> getPermissionKeys() {
-        return new ArrayList<>(Arrays.asList("mobGriefing", "doPVP"));
+        return new ArrayList<>(Arrays.asList("mobGriefing", "doPVP", "doBuilding", "doInteracting"));
     }
 
+    public static void loadTrusted() throws SQLException {
+        AreaEssentials.api.database.create(
+            "CREATE TABLE IF NOT EXISTS Trusted(" +
+            "id int NOT NULL UNIQUE AUTO_INCREMENT, " +
+            "uuid TEXT NOT NULL, " + 
+            "name TEXT NOT NULL, " +
+            "trusted TEXT NOT NULL, " +
+            "permission TEXT NOT NULL, " +
+            "value BOOLEAN NOT NULL);"
+        );
+
+        ResultSet results = AreaEssentials.api.database.fetch("SELECT * FROM Trusted;");
+
+        while(results.next()) {
+            UUID owner = UUID.fromString(results.getString("uuid"));
+            String name = results.getString("name");
+            UUID trusted = UUID.fromString(results.getString("trusted"));
+            String permission = results.getString("permission");
+            Boolean value = results.getBoolean("value");
+
+            for(Area area : AreaUtil.getAreas()) {
+                if(area.getUUID().equals(owner) && area.getName().equals(name)) {
+                    area.setPlayerPermission(permission, trusted, value);
+                }
+            }
+        }
+    }
+
+    public static void trustPlayer(Area area, String permission, UUID trusted, boolean value) throws SQLException {
+        if(area.getPlayerPermission(permission, trusted) != null) {
+            AreaEssentials.api.database.update(
+                "UPDATE Trusted SET value=" + value + " " + 
+                "WHERE uuid='" + area.getUUID() + "' AND name='" + area.getName() + "' AND trusted='" + trusted + "' AND permission='" + permission + "';"
+            );
+        
+        } else {
+            AreaEssentials.api.database.create(
+                "INSERT INTO Trusted(uuid, name, trusted, permission, value) " +
+                "VALUES('" + area.getUUID() + "', '" + area.getName() + "', '" + trusted + "', '" + permission + "', " + value + ");"
+            );
+        }
+        
+        area.setPlayerPermission(permission, trusted, value);
+    }
+
+    public static void distrustPlayer(Area area, String permission, UUID trusted) throws SQLException {
+        AreaEssentials.api.database.update("DELETE FROM Trusted WHERE uuid='" + area.getUUID() + "' AND name='" + area.getName() + "' AND permission='" + permission + "' AND trusted='" + trusted + "';");
+        area.removePlayerPermission(permission, trusted);
+    }
 }

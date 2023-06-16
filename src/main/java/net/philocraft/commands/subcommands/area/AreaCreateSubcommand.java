@@ -7,8 +7,7 @@ import org.bukkit.entity.Player;
 import dev.littlebigowl.api.constants.Colors;
 import dev.littlebigowl.api.errors.InvalidArgumentsException;
 import net.philocraft.AreaEssentials;
-import net.philocraft.errors.AreaExistsException;
-import net.philocraft.errors.NoAreaException;
+import net.philocraft.errors.BadAreaException;
 import net.philocraft.errors.NotEnoughClaimsException;
 import net.philocraft.models.Area;
 import net.philocraft.models.Subcommand;
@@ -41,7 +40,7 @@ public class AreaCreateSubcommand extends Subcommand {
         Area potentialArea = AreaUtil.getPotentialArea(player);
         
         if(potentialArea == null) {
-            return new NoAreaException("Could not find corners for area.").sendCause(player);
+            return new BadAreaException("Could not find corners for area.").sendCause(player);
         }
 
         if(potentialArea.getSurface() > ClaimUtil.getClaimBlocks(player)) {
@@ -49,12 +48,12 @@ public class AreaCreateSubcommand extends Subcommand {
         }
 
         if(args.length == 2 && args[1] != null && AreaUtil.getArea(player, args[1]) != null) {
-            return new AreaExistsException("You already have an area with that name.").sendCause(player);
+            return new InvalidArgumentsException("You already have an area with that name.").sendCause(player);
         }
 
         for(Area playerArea : AreaUtil.getAreas()) {
             if(potentialArea.overlaps(playerArea)) {
-                return new AreaExistsException("This area overlaps with another.").sendCause(player);
+                return new InvalidArgumentsException("This area overlaps with another.").sendCause(player);
             }
         }
 

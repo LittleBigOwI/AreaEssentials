@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -22,6 +23,7 @@ import net.philocraft.commands.subcommands.area.AreaInfoSubcommand;
 import net.philocraft.commands.subcommands.area.AreaRemoveSubommand;
 import net.philocraft.commands.subcommands.area.AreaShowSubcommand;
 import net.philocraft.commands.subcommands.area.AreaShrinkSubcommand;
+import net.philocraft.commands.subcommands.area.AreaTrustSubcommand;
 import net.philocraft.models.Subcommand;
 import net.philocraft.utils.AreaUtil;
 
@@ -32,15 +34,20 @@ public class AreaCommand implements CommandExecutor, TabCompleter {
     public AreaCommand() {
         this.subcommands.add(new AreaCreateSubcommand());
         this.subcommands.add(new AreaRemoveSubommand());
-
         this.subcommands.add(new AreaShowSubcommand());
         this.subcommands.add(new AreaHideSubcommand());
-
         this.subcommands.add(new AreaExpandSubcommand());
-        this.subcommands.add(new AreaShrinkSubcommand());
-        
+        this.subcommands.add(new AreaShrinkSubcommand()); 
         this.subcommands.add(new AreaInfoSubcommand());
         this.subcommands.add(new AreaEditSubcommand());
+        this.subcommands.add(new AreaTrustSubcommand());
+    }
+
+    private ArrayList<String> getOnlinePlayerNames() {
+        ArrayList<String> onlinePlayerNames = new ArrayList<>();
+        Bukkit.getOnlinePlayers().forEach(player -> onlinePlayerNames.add(player.getName()));
+
+        return onlinePlayerNames;
     }
 
     public ArrayList<Subcommand> getSubCommands() {
@@ -89,7 +96,7 @@ public class AreaCommand implements CommandExecutor, TabCompleter {
     public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
         
         if(label.equalsIgnoreCase("area") && args.length == 1) {
-            return Arrays.asList("show", "hide", "info", "expand", "shrink", "create", "remove", "edit");
+            return Arrays.asList("show", "hide", "info", "expand", "shrink", "create", "remove", "edit", "trust");
 
         } else if(label.equalsIgnoreCase("area") && args.length == 2 && args[0].equals("edit")) {
             return Arrays.asList("name", "color", "enterMessage", "leaveMessage", "permissions");
@@ -103,6 +110,14 @@ public class AreaCommand implements CommandExecutor, TabCompleter {
         } else if(label.equalsIgnoreCase("area") && args.length == 4 && args[0].equals("edit") && args[1].equals("permissions") && AreaUtil.getPermissionKeys().contains(args[2])) {
             return Arrays.asList("true", "false");
 
+        } else if(label.equalsIgnoreCase("area") && args.length == 2 && args[0].equals("trust")) {
+            return null;
+
+        } else if(label.equalsIgnoreCase("area") && args.length == 3 && args[0].equals("trust") && this.getOnlinePlayerNames().contains(args[1])) {
+            return AreaUtil.getPermissionKeys();
+
+        } else if(label.equalsIgnoreCase("area") && args.length == 4 && args[0].equals("trust") && this.getOnlinePlayerNames().contains(args[1]) && AreaUtil.getPermissionKeys().contains(args[2])) {
+            return Arrays.asList("true", "false", "default");
         }
         
         return new ArrayList<>();

@@ -8,7 +8,6 @@ import dev.littlebigowl.api.constants.Colors;
 import dev.littlebigowl.api.errors.InvalidArgumentsException;
 import net.philocraft.AreaEssentials;
 import net.philocraft.commands.subcommands.area.AreaEditSubcommand;
-import net.philocraft.errors.AreaExistsException;
 import net.philocraft.models.Area;
 import net.philocraft.models.Subcommand;
 import net.philocraft.utils.AreaUtil;
@@ -45,7 +44,7 @@ public class AreaEditNameSubcommand extends Subcommand {
 
         for(Area playerArea : AreaUtil.getAreas(player)) {
             if(playerArea.getName().equals(name)) {
-                return new AreaExistsException("You already have an area with that name.").sendCause(player);
+                return new InvalidArgumentsException("You already have an area with that name.").sendCause(player);
             }
         }
 

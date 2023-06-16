@@ -6,7 +6,6 @@ import org.bukkit.entity.Player;
 import dev.littlebigowl.api.constants.Colors;
 import dev.littlebigowl.api.errors.InvalidArgumentsException;
 import net.philocraft.components.ShopOpenComponent;
-import net.philocraft.errors.InvalidMaterialException;
 import net.philocraft.models.Subcommand;
 import net.philocraft.utils.ClaimUtil;
 
@@ -21,7 +20,7 @@ public class ClaimBuySubcommand extends Subcommand {
     public String getDescription() {
         return "Buys claim blocks from the claim shop";
     }
-
+    
     @Override
     public String getSyntax() {
         return "/claim buy";
@@ -49,11 +48,11 @@ public class ClaimBuySubcommand extends Subcommand {
         }
 
         if(player.getInventory().getItemInMainHand().getType() != currencyMaterial) {
-            return new InvalidMaterialException().sendCause(player);
+            return new InvalidArgumentsException("You don't have the correct material").sendCause(player);
         }
 
         if(player.getInventory().getItemInMainHand().getAmount() < currencyAmount) {
-            return new InvalidMaterialException().sendCause(player);
+            return new InvalidArgumentsException("You don't have the correct amount of material").sendCause(player);
         }
 
         int playerAmount = player.getInventory().getItemInMainHand().getAmount();

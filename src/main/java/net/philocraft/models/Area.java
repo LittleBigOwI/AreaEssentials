@@ -37,10 +37,10 @@ public class Area {
     private UUID uuid;
 
     private BoundingBox box;
-    
     private HashMap<String, Boolean> permissions = new HashMap<>();
+    private HashMap<String, HashMap<UUID, Boolean>> playerPermissions = new HashMap<>();
 
-    public Area(String name, String enterMessage, String leaveMessage, String groupName, long creationDate, Color color, UUID uuid, BoundingBox box, boolean mobGriefing, boolean doPVP) {
+    public Area(String name, String enterMessage, String leaveMessage, String groupName, long creationDate, Color color, UUID uuid, BoundingBox box, boolean mobGriefing, boolean doPVP, boolean doBuilding, boolean doInteracting) {
         this.name = name;
         this.enterMessage = enterMessage;
         this.leaveMessage = leaveMessage;
@@ -54,10 +54,12 @@ public class Area {
 
         this.permissions.put("mobGriefing", mobGriefing);
         this.permissions.put("doPVP", doPVP);
+        this.permissions.put("doBuilding", doBuilding);
+        this.permissions.put("doInteracting", doInteracting);
     }
 
     public Area(String name, Color color, UUID uuid, BoundingBox box) {
-        this(name, null, null, uuid.toString(), new Date().getTime(), color, uuid, box, false, false);
+        this(name, null, null, uuid.toString(), new Date().getTime(), color, uuid, box, false, false, true, true);
     }
 
     private boolean hasAirBlocksAbove(World world, Location location) {
@@ -404,5 +406,31 @@ public class Area {
 
     public boolean overlaps(Area area) {
         return this.box.overlaps(area.box);
+    }
+
+    public Boolean getPlayerPermission(String permission, UUID uuid) {
+        if(this.playerPermissions.get(permission) == null) {
+            return null;
+        }
+        return this.playerPermissions.get(permission).get(uuid);
+    }
+
+    public void setPlayerPermission(String permission, UUID uuid, boolean value) {
+        HashMap<UUID, Boolean> playerPermission = this.playerPermissions.get(permission);
+        if(playerPermission == null) {
+            this.playerPermissions.put(permission, new HashMap<UUID, Boolean>());
+        }
+
+        this.playerPermissions.get(permission).put(uuid, value);
+
+    }
+
+    public void removePlayerPermission(String permission, UUID uuid) {
+        HashMap<UUID, Boolean> playerPermission = this.playerPermissions.get(permission);
+        if(playerPermission == null) {
+            this.playerPermissions.put(permission, new HashMap<UUID, Boolean>());
+        }
+
+        this.playerPermissions.get(permission).remove(uuid);
     }
 }

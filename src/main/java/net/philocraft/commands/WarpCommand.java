@@ -10,7 +10,6 @@ import org.bukkit.entity.Player;
 
 import dev.littlebigowl.api.errors.InvalidArgumentsException;
 import dev.littlebigowl.api.errors.InvalidSenderException;
-import net.philocraft.errors.WarpNotFoundException;
 import net.philocraft.models.Warp;
 import net.philocraft.utils.WarpUtil;
 
@@ -30,7 +29,7 @@ public class WarpCommand implements CommandExecutor, TabCompleter {
         Warp warp = WarpUtil.getWarp(args[0]);
 
         if(warp == null) {
-            return new WarpNotFoundException().sendCause(sender);
+            return new InvalidArgumentsException("Could not find warp.").sendCause(sender);
         }
 
         warp.teleport(player);

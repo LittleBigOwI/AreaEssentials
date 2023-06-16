@@ -4,8 +4,7 @@ import org.bukkit.entity.Player;
 
 import dev.littlebigowl.api.constants.Colors;
 import dev.littlebigowl.api.errors.InvalidArgumentsException;
-import net.philocraft.errors.AreaExistsException;
-import net.philocraft.errors.NoAreaException;
+import net.philocraft.errors.BadAreaException;
 import net.philocraft.errors.NotEnoughClaimsException;
 import net.philocraft.models.Area;
 import net.philocraft.models.Subcommand;
@@ -35,22 +34,17 @@ public class AreaExpandSubcommand extends Subcommand {
             return new InvalidArgumentsException().sendCause(player);
         }
 
-        int i = 0;
-        while(i < AreaUtil.getAreas().size() && !AreaUtil.getAreas().get(i).contains(player)) {
-            i++;
+        Area area = AreaUtil.getArea(player.getLocation());
+
+        if(area == null) {
+            return new BadAreaException().sendCause(player);
         }
 
-        if(i == AreaUtil.getAreas().size()) {
-            return new NoAreaException().sendCause(player);
+        if(!area.getUUID().equals(player.getUniqueId())) {
+            return new BadAreaException("You are not the owner of this area.").sendCause(player);
         }
 
-        if(!AreaUtil.getAreas().get(i).getUUID().equals(player.getUniqueId())) {
-            return new NoAreaException("You are not the owner of this area.").sendCause(player);
-        }
-
-        Area area = AreaUtil.getAreas().get(i);
         int amount;
-
         try {
             amount = Integer.parseInt(args[1]);
         } catch (NumberFormatException e) {
@@ -64,7 +58,7 @@ public class AreaExpandSubcommand extends Subcommand {
         int cost = (int)area.getExpandCost(player, amount);
 
         if(cost == -1) {
-            return new AreaExistsException().sendCause(player);
+            return new BadAreaException("There is already an area at this location.").sendCause(player);
         }
         
         if(cost > ClaimUtil.getClaimBlocks(player)) {

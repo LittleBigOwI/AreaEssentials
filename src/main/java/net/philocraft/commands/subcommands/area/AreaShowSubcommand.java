@@ -3,7 +3,7 @@ package net.philocraft.commands.subcommands.area;
 import org.bukkit.entity.Player;
 
 import dev.littlebigowl.api.errors.InvalidArgumentsException;
-import net.philocraft.errors.NoAreaException;
+import net.philocraft.errors.BadAreaException;
 import net.philocraft.models.Area;
 import net.philocraft.models.Subcommand;
 import net.philocraft.utils.AreaUtil;
@@ -31,16 +31,11 @@ public class AreaShowSubcommand extends Subcommand {
             return new InvalidArgumentsException().sendCause(player);
         }
 
-        int i = 0;
-        while(i < AreaUtil.getAreas().size() && !AreaUtil.getAreas().get(i).contains(player)) {
-            i++;
-        }
+        Area area = AreaUtil.getArea(player.getLocation());
 
-        if(i == AreaUtil.getAreas().size()) {
-            return new NoAreaException().sendCause(player);
+        if(area == null) {
+            return new BadAreaException().sendCause(player);
         }
-
-        Area area = AreaUtil.getAreas().get(i);
 
         area.show(player);
         return true;

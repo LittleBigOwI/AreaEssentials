@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 import dev.littlebigowl.api.constants.Colors;
 import dev.littlebigowl.api.errors.InvalidArgumentsException;
 import net.md_5.bungee.api.ChatColor;
-import net.philocraft.errors.NoAreaException;
+import net.philocraft.errors.BadAreaException;
 import net.philocraft.models.Area;
 import net.philocraft.models.Subcommand;
 import net.philocraft.utils.AreaUtil;
@@ -38,16 +38,11 @@ public class AreaInfoSubcommand extends Subcommand {
             return new InvalidArgumentsException().sendCause(player);
         }
 
-        int i = 0;
-        while(i < AreaUtil.getAreas().size() && !AreaUtil.getAreas().get(i).contains(player)) {
-            i++;
-        }
+        Area area = AreaUtil.getArea(player.getLocation());
 
-        if(i == AreaUtil.getAreas().size()) {
-            return new NoAreaException().sendCause(player);
+        if(area == null) {
+            return new BadAreaException().sendCause(player);
         }
-
-        Area area = AreaUtil.getAreas().get(i);
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyy HH:mm:ss z");
         dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+2"));

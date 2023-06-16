@@ -13,6 +13,8 @@ import net.philocraft.commands.ClaimCommand;
 import net.philocraft.commands.DelWarpCommand;
 import net.philocraft.commands.SetWarpCommand;
 import net.philocraft.commands.WarpCommand;
+import net.philocraft.events.OnBlockBreakEvent;
+import net.philocraft.events.OnBlockPlaceEvent;
 import net.philocraft.events.OnEntityChangeBlockEvent;
 import net.philocraft.events.OnEntityDamageEvent;
 import net.philocraft.events.OnEntityExplodeEvent;
@@ -42,6 +44,7 @@ public class AreaEssentials extends JavaPlugin {
 
             try {
                 AreaUtil.loadAreas();
+                AreaUtil.loadTrusted();
                 this.getLogger().info("Loaded " + AreaUtil.getAreas().size() + " areas.");
             } catch (SQLException | ParseException e) {
                 this.getLogger().severe("Couldn't load areas : " + e.getMessage());
@@ -57,7 +60,7 @@ public class AreaEssentials extends JavaPlugin {
             WarpUtil.loadWarps();
             this.getLogger().info("Loaded claims & warps.");
         } catch (SQLException e) {
-            this.getLogger().severe("Couldn't load claim/warp : " + e.getMessage());
+            this.getLogger().severe("Couldn't load claims/warps/trusted : " + e.getMessage());
         }
 
         ClaimUtil.checkPlaytimeBlocks();
@@ -69,6 +72,9 @@ public class AreaEssentials extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new OnPlayerInteractEvent(), this);
         this.getServer().getPluginManager().registerEvents(new OnPlayerMoveEvent(), this);
         this.getServer().getPluginManager().registerEvents(new OnProjectileContactEvent(), this);
+        this.getServer().getPluginManager().registerEvents(new OnBlockPlaceEvent(), this);
+        this.getServer().getPluginManager().registerEvents(new OnBlockBreakEvent(), this);
+
 
         //!REGISTER COMMANDS
         this.getCommand("claim").setExecutor(new ClaimCommand());
