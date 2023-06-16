@@ -5,6 +5,7 @@ import org.bukkit.entity.Player;
 
 import dev.littlebigowl.api.constants.Colors;
 import dev.littlebigowl.api.errors.InvalidArgumentsException;
+import net.philocraft.components.ShopOpenComponent;
 import net.philocraft.errors.InvalidMaterialException;
 import net.philocraft.models.Subcommand;
 import net.philocraft.utils.ClaimUtil;
@@ -28,15 +29,24 @@ public class ClaimBuySubcommand extends Subcommand {
 
     @Override
     public boolean perform(Player player, String[] args) {
-        if(args.length != 4 || !ClaimUtil.getBuyMode(player)) {
+        if(args.length != 4) {
             return new InvalidArgumentsException().sendCause(player);
         }
-
-        ClaimUtil.setBuyModeOff(player);
 
         int currencyAmount = Integer.parseInt(args[1]);
         Material currencyMaterial = Material.getMaterial(args[2]);
         int productAmount = Integer.parseInt(args[3]);
+
+        String command = "/claim buy " + currencyAmount + " " + currencyMaterial + " " + productAmount;
+        
+        int i = 0;
+        while(i < ShopOpenComponent.getPossibleCommands().size() && !ShopOpenComponent.getPossibleCommands().get(i).equals(command)) {
+            i++;
+        }
+
+        if(i == ShopOpenComponent.getPossibleCommands().size()) {
+            return new InvalidArgumentsException().sendCause(player);
+        }
 
         if(player.getInventory().getItemInMainHand().getType() != currencyMaterial) {
             return new InvalidMaterialException().sendCause(player);

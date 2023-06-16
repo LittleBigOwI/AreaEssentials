@@ -11,6 +11,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.util.BoundingBox;
 import org.bukkit.util.Vector;
@@ -209,6 +210,10 @@ public class Area {
 
     public boolean contains(Player p) {
         return this.box.contains(p.getLocation().toVector());
+    }
+
+    public boolean contains(Entity e) {
+        return this.box.contains(e.getLocation().toVector());
     }
 
     public boolean contains(Location l) {

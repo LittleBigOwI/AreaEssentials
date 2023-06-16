@@ -104,7 +104,7 @@ public class AreaCommand implements CommandExecutor, TabCompleter {
             return Arrays.asList("true", "false");
 
         }
-
+        
         return new ArrayList<>();
     }
     

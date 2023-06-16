@@ -1,5 +1,7 @@
 package net.philocraft.components;
 
+import java.util.ArrayList;
+
 import org.bukkit.entity.Player;
 
 import dev.littlebigowl.api.constants.Colors;
@@ -9,9 +11,10 @@ import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.chat.hover.content.Text;
-import net.philocraft.utils.ClaimUtil;
 
 public class ShopOpenComponent {
+
+    private static ArrayList<String> possibleCommands = new ArrayList<>();
     
     private Player player;
     private String[][] message;
@@ -23,6 +26,12 @@ public class ShopOpenComponent {
         this.message = message;
 
         this.commands = commands;
+
+        for(String command : commands) {
+            if(!possibleCommands.contains(command)) {
+                possibleCommands.add(command);
+            }
+        }
     }
 
     private BaseComponent[] build() {
@@ -59,8 +68,11 @@ public class ShopOpenComponent {
         return finalMessage.create();
     }
 
+    public static ArrayList<String> getPossibleCommands() {
+        return ShopOpenComponent.possibleCommands;
+    }
+
     public void send() {
-        ClaimUtil.setBuyModeOn(player);
         this.player.spigot().sendMessage(this.build());
     }
 }

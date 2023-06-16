@@ -100,6 +100,7 @@ public class OnPlayerInteractEvent implements Listener {
             
             if(corners.get(player).size() == 2 && OnPlayerInteractEvent.setupArea(player) == null) {
                 new AreaExistsException("Invalid corner placement.").sendCause(player);
+                corners.put(player, new ArrayList<>());
             } else {
                 player.sendMessage(Colors.SUCCESS.getChatColor() + "Position #1 is set."); 
             }
@@ -114,6 +115,7 @@ public class OnPlayerInteractEvent implements Listener {
 
             if(corners.get(player).size() == 2 && OnPlayerInteractEvent.setupArea(player) == null) {
                 new AreaExistsException("Invalid corner placement.").sendCause(player);
+                corners.put(player, new ArrayList<>());
             } else {
                 player.sendMessage(Colors.SUCCESS.getChatColor() + "Position #2 is set."); 
             }
