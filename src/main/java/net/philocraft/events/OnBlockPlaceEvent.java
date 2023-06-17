@@ -29,7 +29,7 @@ public class OnBlockPlaceEvent implements Listener {
             event.getPlayer().sendMessage(Colors.FAILURE.getChatColor() + "You can't break blocks here.");
             event.setCancelled(true);
 
-        } else if(permission == null && !area.getPermission("doBuilding")) {
+        } else if(permission == null && !area.getPermission("doBuilding") && !area.getUUID().equals(event.getPlayer().getUniqueId())) {
             event.getPlayer().sendMessage(Colors.FAILURE.getChatColor() + "You can't break blocks here.");
             event.setCancelled(true);
         }

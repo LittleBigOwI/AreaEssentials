@@ -97,7 +97,7 @@ public class OnPlayerInteractEvent implements Listener {
                 event.getPlayer().sendMessage(Colors.FAILURE.getChatColor() + "You can't interact with blocks here.");
                 event.setCancelled(true);
 
-            } else if(permission == null && !area.getPermission("doInteracting") && action == Action.RIGHT_CLICK_BLOCK && block.getState() instanceof InventoryHolder) {
+            } else if(permission == null && !area.getPermission("doInteracting") && action == Action.RIGHT_CLICK_BLOCK && block.getState() instanceof InventoryHolder && !area.getUUID().equals(event.getPlayer().getUniqueId())) {
                 event.getPlayer().sendMessage(Colors.FAILURE.getChatColor() + "You can't interact with blocks here.");
                 event.setCancelled(true);
             }

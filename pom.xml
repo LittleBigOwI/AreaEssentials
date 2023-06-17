@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>net.philocraft</groupId>
   <artifactId>AreaEssentials</artifactId>
-  <version>1.2.0</version>
+  <version>1.2.1</version>
   <properties>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>

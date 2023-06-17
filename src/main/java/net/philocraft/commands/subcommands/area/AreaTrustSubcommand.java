@@ -58,6 +58,10 @@ public class AreaTrustSubcommand extends Subcommand {
 
         trusted = trustedPlayer.getUniqueId();
 
+        if(player.getName().equals(args[1])) {
+            return new InvalidArgumentsException("You can't change permissions for yourself.").sendCause(player);
+        }
+
         if(args[3].equals("default")) {
             try {
                 AreaUtil.distrustPlayer(area, permission, trusted);
@@ -74,15 +78,11 @@ public class AreaTrustSubcommand extends Subcommand {
 
             return true;
         }
-        
+
         try {
             value = Boolean.parseBoolean(args[3]);
         } catch (Exception e) {
             return new InvalidArgumentsException().sendCause(player);
-        }
-
-        if(player.getName().equals(args[1])) {
-            return new InvalidArgumentsException("You can't change permissions for yourself.").sendCause(player);
         }
 
         String yesOrNo;
