@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.UUID;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -368,8 +369,18 @@ public class Area {
             }
         }
 
+        UUID uuid = this.getUUID();
+        String playerName;
+
+        if(Bukkit.getPlayer(uuid) != null) {
+            playerName = Bukkit.getPlayer(uuid).getName();
+        } else {
+            playerName = Bukkit.getOfflinePlayer(uuid).getName();
+        }
+
         ExtrudeMarker marker = ExtrudeMarker.builder()
             .label(this.getName())
+            .detail("<div style=\"text-align: center\">" + this.getName() + "</div>" + "(" + playerName + ")")
             .shape(new Shape(this.getAnchorPoints()), -64, 320)
             .lineColor(new de.bluecolored.bluemap.api.math.Color(borderColor[0], borderColor[1], borderColor[2], 1.0f))
             .fillColor(new de.bluecolored.bluemap.api.math.Color(fillcolor[0], fillcolor[1], fillcolor[2], 0.3f))
