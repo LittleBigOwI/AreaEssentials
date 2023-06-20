@@ -168,7 +168,7 @@ public class AreaUtil {
                 "mobGriefing, " +
                 "doPVP," +
                 "doBuilding," +
-                "doInteracting," +
+                "doInteracting" +
             ") VALUES('" +
                 area.getUUID() + "', '" +
                 area.getName() + "', '" + 
