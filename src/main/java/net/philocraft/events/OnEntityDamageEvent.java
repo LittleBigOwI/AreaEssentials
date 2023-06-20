@@ -24,7 +24,7 @@ public class OnEntityDamageEvent implements Listener {
                 Boolean pvpAttackerAttacker = attackerArea.getPlayerPermission("doPVP", attacker.getUniqueId());            
                 Boolean pvpAttackerAttacked = attackerArea.getPlayerPermission("doPVP", attacked.getUniqueId());
 
-                if(!pvpAttackerAttacker && !pvpAttackerAttacked) {
+                if(pvpAttackerAttacker != null && !pvpAttackerAttacker && pvpAttackerAttacked != null && !pvpAttackerAttacked) {
                     event.setCancelled(true);
                 }
             }
@@ -33,7 +33,7 @@ public class OnEntityDamageEvent implements Listener {
                 Boolean pvpAttackedAttacked = attackedArea.getPlayerPermission("doPVP", attacked.getUniqueId());
                 Boolean pvpAttackedAttacker = attackedArea.getPlayerPermission("doPVP", attacker.getUniqueId());
 
-                if(!pvpAttackedAttacker && !pvpAttackedAttacked) {
+                if(pvpAttackedAttacker != null && !pvpAttackedAttacker && pvpAttackedAttacked != null && !pvpAttackedAttacked) {
                     event.setCancelled(true);
                 }
             }

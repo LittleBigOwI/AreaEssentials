@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -89,15 +90,25 @@ public class OnPlayerInteractEvent implements Listener {
 
             Boolean permission = area.getPlayerPermission("doInteracting", player.getUniqueId());
 
-            if(permission != null && !permission && !area.getPermission("doInteracting") && action == Action.RIGHT_CLICK_BLOCK && block.getState() instanceof InventoryHolder) {
+            if(action != Action.RIGHT_CLICK_BLOCK
+                && (
+                    !(block.getState() instanceof InventoryHolder)
+                    || player.getInventory().getItemInMainHand().getType() != Material.WATER_BUCKET
+                    || player.getInventory().getItemInMainHand().getType() != Material.LAVA_BUCKET
+                )
+            ) {
+                return;
+            }
+
+            if(permission != null && !permission && !area.getPermission("doInteracting")) {
                 event.getPlayer().sendMessage(Colors.FAILURE.getChatColor() + "You can't interact with blocks here.");
                 event.setCancelled(true);
 
-            } else if(permission != null && !permission && area.getPermission("doInteracting") && action == Action.RIGHT_CLICK_BLOCK && block.getState() instanceof InventoryHolder) {
+            } else if(permission != null && !permission && area.getPermission("doInteracting")) {
                 event.getPlayer().sendMessage(Colors.FAILURE.getChatColor() + "You can't interact with blocks here.");
                 event.setCancelled(true);
 
-            } else if(permission == null && !area.getPermission("doInteracting") && action == Action.RIGHT_CLICK_BLOCK && block.getState() instanceof InventoryHolder && !area.getUUID().equals(event.getPlayer().getUniqueId())) {
+            } else if(permission == null && !area.getPermission("doInteracting") && !area.getUUID().equals(event.getPlayer().getUniqueId())) {
                 event.getPlayer().sendMessage(Colors.FAILURE.getChatColor() + "You can't interact with blocks here.");
                 event.setCancelled(true);
             }
