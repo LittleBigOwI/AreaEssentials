@@ -11,8 +11,10 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
 import dev.littlebigowl.api.constants.Colors;
+import dev.littlebigowl.api.constants.Worlds;
 import dev.littlebigowl.api.errors.InvalidArgumentsException;
 import dev.littlebigowl.api.errors.InvalidSenderException;
+import dev.littlebigowl.api.errors.InvalidWorldException;
 import net.philocraft.commands.subcommands.claim.ClaimBlocksSubcommand;
 import net.philocraft.commands.subcommands.claim.ClaimBuySubcommand;
 import net.philocraft.commands.subcommands.claim.ClaimOffSubcommand;
@@ -42,6 +44,10 @@ public class ClaimCommand implements CommandExecutor, TabCompleter {
         }
 
         Player player = (Player)sender;
+
+        if(!player.getWorld().equals(Worlds.OVERWORLD.getWorld())) {
+            return new InvalidWorldException().sendCause(player);   
+        }
         
         if(args.length == 0) {
             ClaimUtil.toggleClaimMode(player);
